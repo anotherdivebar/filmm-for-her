@@ -1,6 +1,5 @@
-"use client";
-
-import { FormEvent, useState } from "react";
+import { BookingExperience } from "./booking-experience";
+import { SiteHeader } from "./site-header";
 
 const portfolio = [
   {
@@ -9,6 +8,8 @@ const portfolio = [
     title: "Wichita Study I",
     medium: "35mm / Double exposure",
     className: "project project-wide",
+    width: 968,
+    height: 642,
   },
   {
     src: "/parking-structure.png",
@@ -16,6 +17,8 @@ const portfolio = [
     title: "Understructure",
     medium: "35mm / Architecture",
     className: "project project-vertical",
+    width: 906,
+    height: 599,
   },
   {
     src: "/city-riders.png",
@@ -23,6 +26,8 @@ const portfolio = [
     title: "Passing Figures",
     medium: "35mm / Street",
     className: "project project-standard",
+    width: 907,
+    height: 605,
   },
   {
     src: "/kansas-prairie.png",
@@ -30,6 +35,8 @@ const portfolio = [
     title: "Prairie Line",
     medium: "35mm / Landscape",
     className: "project project-panorama",
+    width: 909,
+    height: 603,
   },
 ];
 
@@ -54,50 +61,12 @@ const services = [
   },
 ];
 
-const availableDays = [3, 4, 9, 10, 16, 17, 23, 24, 29];
-const calendarDays: Array<number | null> = [
-  null,
-  null,
-  ...Array.from({ length: 30 }, (_, index) => index + 1),
-];
-const times = ["10:00 am", "1:00 pm", "3:30 pm"];
-
 export default function Home() {
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
-  const [selectedTime, setSelectedTime] = useState("");
-  const [requestSent, setRequestSent] = useState(false);
-
-  function handleRequest(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!selectedDay || !selectedTime) return;
-    setRequestSent(true);
-  }
-
   return (
-    <main>
-      <header className="site-header">
-        <a className="wordmark" href="#top" aria-label="filmmforher home">
-          FILMM<span>/</span>FORHER
-        </a>
-        <nav className="desktop-nav" aria-label="Main navigation">
-          <a href="#work">Selected work</a>
-          <a href="#services">Services</a>
-          <a href="#about">Profile</a>
-          <a className="nav-inquiry" href="#book">Inquire <span>↗</span></a>
-        </nav>
-        <details className="mobile-menu">
-          <summary aria-label="Open navigation">Index</summary>
-          <nav
-            aria-label="Mobile navigation"
-            onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}
-          >
-            <a href="#work">Selected work</a>
-            <a href="#services">Services</a>
-            <a href="#about">Profile</a>
-            <a href="#book">Inquire</a>
-          </nav>
-        </details>
-      </header>
+    <>
+      <a className="skip-link" href="#main-content">Skip to content</a>
+      <SiteHeader />
+      <main id="main-content" tabIndex={-1}>
 
       <section className="hero" id="top">
         <div className="hero-copy">
@@ -112,7 +81,14 @@ export default function Home() {
         </div>
 
         <figure className="hero-figure">
-          <img src="/marissa-portrait.png" alt="Black-and-white portrait of a woman looking upward" />
+          <img
+            src="/marissa-portrait.png"
+            alt="Black-and-white portrait of a woman looking upward"
+            width={960}
+            height={959}
+            fetchPriority="high"
+            decoding="async"
+          />
           <figcaption>
             <span>Portrait 001</span>
             <span>35mm / B&W</span>
@@ -143,7 +119,14 @@ export default function Home() {
           {portfolio.map((item, index) => (
             <figure className={item.className} key={item.src}>
               <div className="project-image">
-                <img src={item.src} alt={item.alt} loading={index > 1 ? "lazy" : "eager"} />
+                <img
+                  src={item.src}
+                  alt={item.alt}
+                  width={item.width}
+                  height={item.height}
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <figcaption>
                 <span className="project-number">{String(index + 1).padStart(2, "0")}</span>
@@ -178,7 +161,14 @@ export default function Home() {
 
       <section className="about-section" id="about">
         <div className="about-visual">
-          <img src="/parking-structure.png" alt="Graphic architectural study through a parking structure" loading="lazy" />
+          <img
+            src="/parking-structure.png"
+            alt="Graphic architectural study through a parking structure"
+            width={906}
+            height={599}
+            loading="lazy"
+            decoding="async"
+          />
           <span>MR / 2026</span>
         </div>
         <div className="about-copy">
@@ -213,121 +203,21 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="booking-card">
-          {!requestSent ? (
-            <>
-              <div className="calendar-head">
-                <div>
-                  <span>Booking availability</span>
-                  <h3>September 2026</h3>
-                </div>
-                <div className="calendar-key"><i /> Available</div>
-              </div>
-              <div className="calendar-weekdays" aria-hidden="true">
-                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                  <span key={day}>{day}</span>
-                ))}
-              </div>
-              <div className="calendar-grid" role="grid" aria-label="September 2026 availability">
-                {calendarDays.map((day, index) => {
-                  if (!day) return <span className="calendar-empty" key={`empty-${index}`} />;
-                  const available = availableDays.includes(day);
-                  const selected = selectedDay === day;
-                  return (
-                    <button
-                      type="button"
-                      className={`${available ? "available" : ""} ${selected ? "selected" : ""}`}
-                      disabled={!available}
-                      onClick={() => {
-                        setSelectedDay(day);
-                        setSelectedTime("");
-                      }}
-                      aria-label={`${available ? "Available" : "Unavailable"} September ${day}`}
-                      aria-pressed={selected}
-                      key={day}
-                    >
-                      {day}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <form className="booking-form" onSubmit={handleRequest}>
-                <div className="time-picker">
-                  <div className="form-label">
-                    {selectedDay ? `September ${selectedDay} / select a time` : "Select a date to view times"}
-                  </div>
-                  <div className="time-options">
-                    {times.map((time) => (
-                      <button
-                        type="button"
-                        disabled={!selectedDay}
-                        className={selectedTime === time ? "selected" : ""}
-                        onClick={() => setSelectedTime(time)}
-                        aria-pressed={selectedTime === time}
-                        key={time}
-                      >
-                        {time}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className="form-row">
-                  <label>
-                    <span>Name</span>
-                    <input name="name" type="text" placeholder="Your name" required />
-                  </label>
-                  <label>
-                    <span>Email</span>
-                    <input name="email" type="email" placeholder="you@company.com" required />
-                  </label>
-                </div>
-                <label>
-                  <span>Project type</span>
-                  <select name="project" defaultValue="" required>
-                    <option value="" disabled>Select one</option>
-                    <option>Executive portraiture</option>
-                    <option>Team portrait day</option>
-                    <option>Corporate event</option>
-                    <option>Creative event</option>
-                    <option>Editorial or brand commission</option>
-                  </select>
-                </label>
-                <label>
-                  <span>Project brief</span>
-                  <textarea name="details" rows={3} placeholder="People, place, intended use, and timing" required />
-                </label>
-                <button className="submit-button" type="submit" disabled={!selectedDay || !selectedTime}>
-                  Request date <span>↗</span>
-                </button>
-                <p className="form-note">Demonstration only. No request is sent from this preview.</p>
-              </form>
-            </>
-          ) : (
-            <div className="success-state" aria-live="polite">
-              <p className="section-index">Request prepared</p>
-              <h3>September {selectedDay}<br />at {selectedTime}</h3>
-              <p>
-                This preview shows the completed request state. Once connected, I would receive your brief and follow up personally.
-              </p>
-              <button onClick={() => setRequestSent(false)}>Choose another date</button>
-            </div>
-          )}
-        </div>
+        <BookingExperience />
       </section>
-
+      </main>
       <footer className="site-footer">
         <div className="footer-title">
           <span>Photography by</span>
           <p>Marissa Reynolds</p>
         </div>
         <div className="footer-bottom">
-          <a className="wordmark wordmark-footer" href="#top">FILMM<span>/</span>FORHER</a>
+          <a className="wordmark wordmark-footer" href="#top" aria-label="FILMM/FORHER home">FILMM<span>/</span>FORHER</a>
           <p>Wichita, Kansas / Regional commissions</p>
           <p>© 2026</p>
           <a href="#book">Inquire <span>↑</span></a>
         </div>
       </footer>
-    </main>
+    </>
   );
 }

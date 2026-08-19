@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import "./globals.css";
 
@@ -6,7 +6,7 @@ const title = "FILMM/FORHER | Photography by Marissa Reynolds";
 const description =
   "Executive portraiture, events, and independent 35mm work by Wichita photographer Marissa Reynolds.";
 
-export async function generateMetadata(): Promise<Metadata> {
+async function getOrigin() {
   const requestHeaders = await headers();
   const host =
     requestHeaders.get("x-forwarded-host") ??
@@ -15,12 +15,33 @@ export async function generateMetadata(): Promise<Metadata> {
   const protocol =
     requestHeaders.get("x-forwarded-proto") ??
     (host.includes("localhost") ? "http" : "https");
-  const origin = `${protocol}://${host}`;
+
+  return `${protocol}://${host}`;
+}
+
+export const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: "#efeee9",
+};
+
+export async function generateMetadata(): Promise<Metadata> {
+  const origin = await getOrigin();
   const socialImage = `${origin}/og-serious.png`;
 
   return {
     title,
     description,
+    authors: [{ name: "Marissa Reynolds" }],
+    creator: "Marissa Reynolds",
+    publisher: "FILMM/FORHER",
+    category: "Photography",
+    alternates: {
+      canonical: origin,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
     icons: {
       icon: "/marissa-portrait.png",
     },
@@ -54,14 +75,47 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const origin = await getOrigin();
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: "FILMM/FORHER",
+    url: origin,
+    image: `${origin}/og-serious.png`,
+    description,
+    founder: {
+      "@type": "Person",
+      name: "Marissa Reynolds",
+      jobTitle: "Photographer",
+    },
+    areaServed: {
+      "@type": "City",
+      name: "Wichita, Kansas",
+    },
+    knowsAbout: [
+      "Executive portraiture",
+      "Corporate event photography",
+      "Editorial photography",
+      "35mm photography",
+    ],
+  };
+
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+          }}
+        />
+      </body>
     </html>
   );
 }

@@ -39,27 +39,41 @@ test("server-renders the editorial portfolio and booking experience", async () =
   assert.match(html, /September 2026/);
   assert.match(html, /Request date/);
   assert.match(html, /http:\/\/localhost:3000\/og-serious\.png/);
-  assert.doesNotMatch(html, /—|&mdash;/i);
+  assert.match(html, /Skip to content/);
+  assert.match(html, /application\/ld\+json/);
+  assert.match(html, /ProfessionalService/);
+  assert.match(html, /rel="canonical"/);
+  assert.doesNotMatch(html, /\u2014|&mdash;/i);
   assert.doesNotMatch(html, /codex-preview|Starter Project|react-loading-skeleton/i);
 });
 
-test("keeps the finished site responsive and self-contained", async () => {
-  const [page, css, layout, packageJson] = await Promise.all([
+test("keeps the finished site responsive, accessible, and self-contained", async () => {
+  const [page, booking, header, css, layout, packageJson] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/booking-experience.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/site-header.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
   ]);
 
-  assert.match(page, /^"use client";/);
-  assert.match(page, /const availableDays = \[/);
-  assert.match(page, /setRequestSent\(true\)/);
-  assert.match(page, /Demonstration only\. No request is sent from this preview\./);
-  assert.doesNotMatch(`${page}${layout}`, /—|&mdash;/i);
+  assert.doesNotMatch(page, /^"use client";/);
+  assert.match(booking, /^"use client";/);
+  assert.match(header, /^"use client";/);
+  assert.match(booking, /const availableDays = \[/);
+  assert.match(booking, /setRequestSent\(true\)/);
+  assert.match(booking, /autoComplete="name"/);
+  assert.match(booking, /Demonstration only\. No request is sent from this preview\./);
+  assert.match(page, /fetchPriority="high"/);
+  assert.match(page, /className="skip-link"/);
+  assert.doesNotMatch(`${page}${booking}${header}${layout}`, /\u2014|&mdash;/i);
   assert.match(layout, /generateMetadata/);
   assert.match(layout, /x-forwarded-host/);
+  assert.match(layout, /ProfessionalService/);
+  assert.match(layout, /canonical/);
   assert.match(css, /@media \(max-width: 560px\)/);
   assert.match(css, /prefers-reduced-motion: reduce/);
+  assert.match(css, /\.skip-link/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
 
   await Promise.all([
