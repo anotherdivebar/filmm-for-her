@@ -36,6 +36,7 @@ test("server-renders the editorial portfolio and booking experience", async () =
   assert.match(html, /September 2026/);
   assert.match(html, /Request date/);
   assert.match(html, /http:\/\/localhost:3000\/og-serious\.png/);
+  assert.doesNotMatch(html, /—|&mdash;/i);
   assert.doesNotMatch(html, /codex-preview|Starter Project|react-loading-skeleton/i);
 });
 
@@ -51,6 +52,7 @@ test("keeps the finished site responsive and self-contained", async () => {
   assert.match(page, /const availableDays = \[/);
   assert.match(page, /setRequestSent\(true\)/);
   assert.match(page, /Demonstration only\. No request is sent from this preview\./);
+  assert.doesNotMatch(`${page}${layout}`, /—|&mdash;/i);
   assert.match(layout, /generateMetadata/);
   assert.match(layout, /x-forwarded-host/);
   assert.match(css, /@media \(max-width: 560px\)/);

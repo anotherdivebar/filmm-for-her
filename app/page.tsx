@@ -31,20 +31,6 @@ const portfolio = [
     medium: "35mm / Landscape",
     className: "project project-panorama",
   },
-  {
-    src: "/night-storefront.png",
-    alt: "Papered storefront illuminated at night",
-    title: "Nocturne",
-    medium: "35mm / Night study",
-    className: "project project-standard",
-  },
-  {
-    src: "/brick-sky.png",
-    alt: "Brick buildings cut against a pale blue sky",
-    title: "Wichita Study II",
-    medium: "35mm / Architecture",
-    className: "project project-vertical",
-  },
 ];
 
 const services = [
@@ -63,7 +49,7 @@ const services = [
   {
     number: "03",
     title: "Editorial & commissions",
-    copy: "Image-led stories for artists, independent brands, publications, and ideas that need a less conventional point of view—on digital, 35mm, or both.",
+    copy: "Image-led stories for artists, independent brands, publications, and ideas that need a less conventional point of view, on digital, 35mm, or both.",
     detail: "Campaigns / Editorial / 35mm",
   },
 ];
@@ -116,7 +102,7 @@ export default function Home() {
           <h1>Images<br />with <em>weight.</em></h1>
           <div className="hero-summary">
             <p>
-              Corporate portraiture, events, and independent work photographed with precision—and the emotional texture of film.
+              Corporate portraiture, events, and independent work photographed with precision and the emotional texture of film.
             </p>
             <a className="arrow-link" href="#work">View selected work <span>↓</span></a>
           </div>
@@ -166,14 +152,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="image-break" aria-label="Featured landscape photograph">
-        <img src="/winter-cedar.png" alt="Snow resting on dark cedar branches" loading="lazy" />
-        <div>
-          <span>Study / Winter</span>
-          <p>The frame begins<br />before the shutter.</p>
-        </div>
-      </section>
-
       <section className="services-section" id="services">
         <div className="section-header section-header-dark">
           <p className="section-index">02 / Services</p>
@@ -204,7 +182,7 @@ export default function Home() {
           <p className="section-index">03 / Profile</p>
           <h2>Marissa<br />Reynolds</h2>
           <p className="about-lead">
-            Marissa photographs people, work, and gatherings. Her approach is observant and composed—attentive to gesture, architecture, light, and the quiet tension that makes a frame last.
+            Marissa photographs people, work, and gatherings. Her approach is observant and composed, attentive to gesture, architecture, light, and the quiet tension that makes a frame last.
           </p>
           <p>
             She works across corporate headshots, organizational events, and self-directed 35mm practice. Each commission is shaped to feel exact without becoming sterile, and natural without becoming casual.
@@ -218,33 +196,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="process-section" aria-labelledby="process-title">
-        <div>
-          <p className="section-index">04 / Process</p>
-          <h2 id="process-title">A clear process<br />leaves room to <em>notice.</em></h2>
-        </div>
-        <div className="process-list">
-          <article>
-            <span>01</span>
-            <h3>Brief</h3>
-            <p>Purpose, audience, location, schedule, and the images the work needs to produce.</p>
-          </article>
-          <article>
-            <span>02</span>
-            <h3>Photograph</h3>
-            <p>Direction where it helps. Observation where it matters. No unnecessary theater.</p>
-          </article>
-          <article>
-            <span>03</span>
-            <h3>Deliver</h3>
-            <p>A focused, edited gallery prepared for its intended use and built to hold up over time.</p>
-          </article>
-        </div>
-      </section>
-
       <section className="booking-section" id="book">
         <div className="booking-intro">
-          <p className="section-index">05 / Inquiries</p>
+          <p className="section-index">04 / Inquiries</p>
           <h2>Begin a<br /><em>conversation.</em></h2>
           <p>
             Select an available date and send a short project brief. Marissa personally reviews and confirms every request.

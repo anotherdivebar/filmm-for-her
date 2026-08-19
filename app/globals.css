@@ -131,7 +131,7 @@ textarea:focus-visible {
 
 .hero-copy {
   display: flex;
-  min-height: 720px;
+  min-height: 620px;
   flex-direction: column;
   justify-content: center;
   padding: 9vw 6vw 9vw 4.5vw;
@@ -204,7 +204,7 @@ h2 em {
 
 .hero-figure {
   position: relative;
-  min-height: 720px;
+  min-height: 620px;
   margin: 0;
   overflow: hidden;
   background: #292927;
@@ -212,7 +212,7 @@ h2 em {
 
 .hero-figure img {
   height: 100%;
-  min-height: 720px;
+  min-height: 620px;
   object-fit: cover;
   object-position: 50% 45%;
   filter: contrast(1.04);
@@ -246,7 +246,7 @@ h2 em {
 }
 
 .statement {
-  padding: 7.5vw 4vw;
+  padding: 5vw 4vw;
   background: var(--ink);
   color: var(--white);
 }
@@ -254,7 +254,7 @@ h2 em {
 .statement p {
   margin: 0;
   font-family: var(--serif);
-  font-size: clamp(54px, 8.9vw, 148px);
+  font-size: clamp(50px, 7.6vw, 124px);
   font-weight: 400;
   letter-spacing: -0.06em;
   line-height: 0.9;
@@ -267,7 +267,7 @@ h2 em {
 }
 
 .work-section {
-  padding: 140px 4vw 180px;
+  padding: 105px 4vw 125px;
   background: var(--white);
 }
 
@@ -277,12 +277,11 @@ h2 em {
   grid-template-columns: 0.55fr 1.35fr 0.55fr;
   gap: 5vw;
   align-items: start;
-  margin: 0 auto 120px;
+  margin: 0 auto 80px;
 }
 
 .section-header h2,
 .about-copy h2,
-.process-section h2,
 .booking-intro h2 {
   margin: 0;
   font-family: var(--serif);
@@ -303,7 +302,7 @@ h2 em {
   display: grid;
   max-width: 1450px;
   grid-template-columns: repeat(12, 1fr);
-  gap: 110px 24px;
+  gap: 65px 22px;
   margin: 0 auto;
 }
 
@@ -312,11 +311,9 @@ h2 em {
 }
 
 .project:nth-child(1) { grid-column: 1 / 8; }
-.project:nth-child(2) { grid-column: 9 / 13; margin-top: 180px; }
+.project:nth-child(2) { grid-column: 9 / 13; margin-top: 80px; }
 .project:nth-child(3) { grid-column: 2 / 6; }
-.project:nth-child(4) { grid-column: 7 / 13; margin-top: 75px; }
-.project:nth-child(5) { grid-column: 1 / 7; }
-.project:nth-child(6) { grid-column: 8 / 13; margin-top: 160px; }
+.project:nth-child(4) { grid-column: 6 / 13; margin-top: 30px; }
 
 .project-image {
   overflow: hidden;
@@ -330,14 +327,12 @@ h2 em {
 }
 
 .project:nth-child(1) img,
-.project:nth-child(4) img,
-.project:nth-child(5) img {
+.project:nth-child(4) img {
   aspect-ratio: 3 / 2;
 }
 
 .project:nth-child(2) img,
-.project:nth-child(3) img,
-.project:nth-child(6) img {
+.project:nth-child(3) img {
   aspect-ratio: 4 / 5;
 }
 
@@ -375,51 +370,14 @@ h2 em {
   color: var(--ink);
 }
 
-.image-break {
-  position: relative;
-  display: grid;
-  min-height: 680px;
-  grid-template-columns: 1.35fr 0.65fr;
-  background: var(--ink);
-  color: var(--white);
-}
-
-.image-break > img {
-  height: 100%;
-  min-height: 680px;
-  object-fit: cover;
-}
-
-.image-break > div {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 42px 3.5vw 55px;
-}
-
-.image-break span {
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.image-break p {
-  margin: 0;
-  font-family: var(--serif);
-  font-size: clamp(38px, 4.4vw, 72px);
-  letter-spacing: -0.05em;
-  line-height: 0.98;
-}
-
 .services-section {
-  padding: 145px 4vw 170px;
+  padding: 105px 4vw 120px;
   background: var(--ink);
   color: var(--white);
 }
 
 .section-header-dark {
-  margin-bottom: 100px;
+  margin-bottom: 70px;
 }
 
 .section-header-dark h2 em {
@@ -438,11 +396,11 @@ h2 em {
 
 .service-row {
   display: grid;
-  min-height: 225px;
+  min-height: 175px;
   grid-template-columns: 0.3fr 1fr 1.1fr 0.65fr;
   gap: 4vw;
   align-items: start;
-  padding: 38px 0 45px;
+  padding: 29px 0 34px;
   border-bottom: 1px solid var(--line-light);
 }
 
@@ -489,13 +447,13 @@ h2 em {
 
 .about-visual {
   position: relative;
-  min-height: 820px;
+  min-height: 650px;
   overflow: hidden;
 }
 
 .about-visual img {
   height: 100%;
-  min-height: 820px;
+  min-height: 650px;
   object-fit: cover;
 }
 
@@ -515,12 +473,12 @@ h2 em {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 100px 6vw;
+  padding: 72px 6vw;
   border-left: 1px solid var(--ink);
 }
 
 .about-copy .section-index {
-  margin-bottom: 65px;
+  margin-bottom: 42px;
 }
 
 .about-copy h2 {
@@ -529,7 +487,7 @@ h2 em {
 }
 
 .about-lead {
-  margin: 60px 0 25px;
+  margin: 38px 0 20px;
   font-family: var(--serif);
   font-size: clamp(20px, 1.75vw, 29px);
   line-height: 1.42;
@@ -543,7 +501,7 @@ h2 em {
 }
 
 .profile-details {
-  margin: 45px 0 28px;
+  margin: 30px 0 22px;
   border-top: 1px solid var(--ink);
 }
 
@@ -571,60 +529,12 @@ h2 em {
   align-self: flex-start;
 }
 
-.process-section {
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 9vw;
-  padding: 145px 5vw;
-  background: var(--white);
-}
-
-.process-section .section-index {
-  margin-bottom: 55px;
-}
-
-.process-section h2 {
-  font-size: clamp(52px, 5.5vw, 90px);
-}
-
-.process-list {
-  border-top: 1px solid var(--ink);
-}
-
-.process-list article {
-  display: grid;
-  grid-template-columns: 50px 0.65fr 1fr;
-  gap: 22px;
-  align-items: start;
-  padding: 32px 0 42px;
-  border-bottom: 1px solid var(--ink);
-}
-
-.process-list article > span {
-  color: var(--accent);
-  font-size: 9px;
-  font-weight: 700;
-}
-
-.process-list h3 {
-  margin: -5px 0 0;
-  font-family: var(--serif);
-  font-size: 34px;
-  font-weight: 400;
-}
-
-.process-list p {
-  margin: 0;
-  font-size: 11px;
-  line-height: 1.75;
-}
-
 .booking-section {
   display: grid;
   grid-template-columns: minmax(360px, 0.72fr) minmax(590px, 1.28fr);
   gap: 6vw;
   align-items: start;
-  padding: 145px 5vw;
+  padding: 105px 5vw;
   background: #dcdad3;
 }
 
@@ -672,7 +582,7 @@ h2 em {
 }
 
 .booking-card {
-  min-height: 760px;
+  min-height: 700px;
   padding: clamp(30px, 4vw, 62px);
   border: 1px solid var(--ink);
   background: var(--white);
@@ -925,7 +835,7 @@ h2 em {
 }
 
 .site-footer {
-  padding: 100px 4vw 34px;
+  padding: 72px 4vw 30px;
   background: var(--ink);
   color: var(--white);
 }
@@ -941,7 +851,7 @@ h2 em {
 }
 
 .footer-title p {
-  margin: 0 0 100px;
+  margin: 0 0 65px;
   font-family: var(--serif);
   font-size: clamp(63px, 10vw, 165px);
   letter-spacing: -0.065em;
@@ -1092,19 +1002,9 @@ h2 em {
   }
 
   .project:nth-child(1) { grid-column: 1 / 9; }
-  .project:nth-child(2) { grid-column: 9 / 13; margin-top: 120px; }
+  .project:nth-child(2) { grid-column: 9 / 13; margin-top: 60px; }
   .project:nth-child(3) { grid-column: 1 / 6; }
-  .project:nth-child(4) { grid-column: 6 / 13; margin-top: 55px; }
-  .project:nth-child(5) { grid-column: 1 / 8; }
-  .project:nth-child(6) { grid-column: 8 / 13; margin-top: 110px; }
-
-  .image-break {
-    grid-template-columns: 1fr;
-  }
-
-  .image-break > div {
-    min-height: 380px;
-  }
+  .project:nth-child(4) { grid-column: 6 / 13; margin-top: 20px; }
 
   .service-row {
     grid-template-columns: 40px 1fr;
@@ -1124,13 +1024,11 @@ h2 em {
     border-left: 0;
   }
 
-  .process-section,
   .booking-section {
     grid-template-columns: 1fr;
     gap: 85px;
   }
 
-  .process-section > div:first-child,
   .booking-intro {
     max-width: 670px;
   }
@@ -1189,14 +1087,12 @@ h2 em {
 
   .work-section,
   .services-section,
-  .process-section,
   .booking-section {
-    padding: 100px 6vw;
+    padding: 80px 6vw;
   }
 
   .section-header h2,
   .about-copy h2,
-  .process-section h2,
   .booking-intro h2 {
     font-size: 52px;
   }
@@ -1227,16 +1123,6 @@ h2 em {
     grid-column: 2;
   }
 
-  .image-break,
-  .image-break > img {
-    min-height: 470px;
-  }
-
-  .image-break > div {
-    min-height: 300px;
-    padding: 30px 6vw 45px;
-  }
-
   .service-row {
     min-height: 0;
     padding: 30px 0 36px;
@@ -1265,14 +1151,6 @@ h2 em {
 
   .profile-details > div {
     grid-template-columns: 105px 1fr;
-  }
-
-  .process-list article {
-    grid-template-columns: 30px 1fr;
-  }
-
-  .process-list p {
-    grid-column: 2;
   }
 
   .booking-card {
