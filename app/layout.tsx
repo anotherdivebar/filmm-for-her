@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import "./globals.css";
 
-const title = "filmmforher — Photography by Marissa Reynolds";
+const title = "FILMM/FORHER | Photography by Marissa Reynolds";
 const description =
-  "Warm, artful headshots, event photography, and creative 35mm stories by Wichita photographer Marissa Reynolds.";
+  "Executive portraiture, events, and independent 35mm work by Wichita photographer Marissa Reynolds.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
     requestHeaders.get("x-forwarded-proto") ??
     (host.includes("localhost") ? "http" : "https");
   const origin = `${protocol}://${host}`;
-  const socialImage = `${origin}/og.png`;
+  const socialImage = `${origin}/og-serious.png`;
 
   return {
     title,
@@ -39,9 +39,9 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [
         {
           url: socialImage,
-          width: 1728,
-          height: 910,
-          alt: "filmmforher photography by Marissa Reynolds",
+          width: 1536,
+          height: 1024,
+          alt: "FILMM/FORHER photography by Marissa Reynolds",
         },
       ],
     },

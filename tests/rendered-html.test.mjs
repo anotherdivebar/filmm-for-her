@@ -23,19 +23,19 @@ async function render() {
   );
 }
 
-test("server-renders the filmmforher portfolio and booking experience", async () => {
+test("server-renders the editorial portfolio and booking experience", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>filmmforher — Photography by Marissa Reynolds<\/title>/i);
-  assert.match(html, /Sharp work\./);
-  assert.match(html, /Soft edges\./);
-  assert.match(html, /Ways to work together/);
+  assert.match(html, /<title>FILMM\/FORHER \| Photography by Marissa Reynolds<\/title>/i);
+  assert.match(html, /Images/);
+  assert.match(html, /with <em>weight\.<\/em>/);
+  assert.match(html, /Executive portraiture/);
   assert.match(html, /September 2026/);
-  assert.match(html, /Request this date/);
-  assert.match(html, /http:\/\/localhost:3000\/og\.png/);
+  assert.match(html, /Request date/);
+  assert.match(html, /http:\/\/localhost:3000\/og-serious\.png/);
   assert.doesNotMatch(html, /codex-preview|Starter Project|react-loading-skeleton/i);
 });
 
@@ -50,7 +50,7 @@ test("keeps the finished site responsive and self-contained", async () => {
   assert.match(page, /^"use client";/);
   assert.match(page, /const availableDays = \[/);
   assert.match(page, /setRequestSent\(true\)/);
-  assert.match(page, /Demo only—no message is sent yet/);
+  assert.match(page, /Demonstration only\. No request is sent from this preview\./);
   assert.match(layout, /generateMetadata/);
   assert.match(layout, /x-forwarded-host/);
   assert.match(css, /@media \(max-width: 560px\)/);
@@ -59,6 +59,6 @@ test("keeps the finished site responsive and self-contained", async () => {
 
   await Promise.all([
     access(new URL("../public/marissa-portrait.png", import.meta.url)),
-    access(new URL("../public/og.png", import.meta.url)),
+    access(new URL("../public/og-serious.png", import.meta.url)),
   ]);
 });
