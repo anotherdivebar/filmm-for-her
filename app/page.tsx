@@ -87,7 +87,10 @@ export default function Home() {
         </nav>
         <details className="mobile-menu">
           <summary aria-label="Open navigation">Index</summary>
-          <nav aria-label="Mobile navigation">
+          <nav
+            aria-label="Mobile navigation"
+            onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}
+          >
             <a href="#work">Selected work</a>
             <a href="#services">Services</a>
             <a href="#about">Profile</a>
@@ -281,7 +284,7 @@ export default function Home() {
                 </div>
                 <label>
                   <span>Project type</span>
-                  <select name="project" defaultValue="">
+                  <select name="project" defaultValue="" required>
                     <option value="" disabled>Select one</option>
                     <option>Executive portraiture</option>
                     <option>Team portrait day</option>
@@ -292,7 +295,7 @@ export default function Home() {
                 </label>
                 <label>
                   <span>Project brief</span>
-                  <textarea name="details" rows={3} placeholder="People, place, intended use, and timing" />
+                  <textarea name="details" rows={3} placeholder="People, place, intended use, and timing" required />
                 </label>
                 <button className="submit-button" type="submit" disabled={!selectedDay || !selectedTime}>
                   Request date <span>↗</span>
