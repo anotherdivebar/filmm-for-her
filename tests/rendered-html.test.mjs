@@ -33,6 +33,9 @@ test("server-renders the editorial portfolio and booking experience", async () =
   assert.match(html, /Images/);
   assert.match(html, /with <em>weight\.<\/em>/);
   assert.match(html, /Executive portraiture/);
+  assert.match(html, /I photograph people, work, and gatherings\./);
+  assert.match(html, /I personally review and confirm every request!/);
+  assert.doesNotMatch(html, /Marissa personally reviews|She works across/);
   assert.match(html, /September 2026/);
   assert.match(html, /Request date/);
   assert.match(html, /http:\/\/localhost:3000\/og-serious\.png/);

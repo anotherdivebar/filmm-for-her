@@ -182,10 +182,10 @@ export default function Home() {
           <p className="section-index">03 / Profile</p>
           <h2>Marissa<br />Reynolds</h2>
           <p className="about-lead">
-            Marissa photographs people, work, and gatherings. Her approach is observant and composed, attentive to gesture, architecture, light, and the quiet tension that makes a frame last.
+            I photograph people, work, and gatherings. My approach is observant and composed, attentive to gesture, architecture, light, and the quiet tension that makes a frame last.
           </p>
           <p>
-            She works across corporate headshots, organizational events, and self-directed 35mm practice. Each commission is shaped to feel exact without becoming sterile, and natural without becoming casual.
+            I work across corporate headshots, organizational events, and self-directed 35mm practice. I shape each commission to feel exact without becoming sterile, and natural without becoming casual.
           </p>
           <dl className="profile-details">
             <div><dt>Based</dt><dd>Wichita, Kansas</dd></div>
@@ -201,7 +201,7 @@ export default function Home() {
           <p className="section-index">04 / Inquiries</p>
           <h2>Begin a<br /><em>conversation.</em></h2>
           <p>
-            Select an available date and send a short project brief. Marissa personally reviews and confirms every request.
+            Select an available date and send me a short project brief. I personally review and confirm every request!
           </p>
           <div className="booking-notes">
             <p><span>For</span>Portraits, events, editorial, and creative commissions</p>
@@ -305,7 +305,7 @@ export default function Home() {
               <p className="section-index">Request prepared</p>
               <h3>September {selectedDay}<br />at {selectedTime}</h3>
               <p>
-                This preview shows the completed request state. Once connected, Marissa would receive the brief and follow up personally.
+                This preview shows the completed request state. Once connected, I would receive your brief and follow up personally.
               </p>
               <button onClick={() => setRequestSent(false)}>Choose another date</button>
             </div>
