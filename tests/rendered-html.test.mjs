@@ -84,6 +84,10 @@ test("keeps the experiment responsive, accessible, and self-contained", async ()
   assert.match(scene, /alphaMap=\{featherTexture\}/);
   assert.match(scene, /MeshReflectorMaterial/);
   assert.match(scene, /CatmullRomCurve3/);
+  assert.match(scene, /function mapReelProgress/);
+  assert.match(scene, /smoothedProgress/);
+  assert.match(scene, /function ArchitecturalMonolith/);
+  assert.match(scene, /PCFSoftShadowMap/);
   assert.match(scene, /<Sky/);
   assert.match(scene, /function CinematicHud/);
   assert.match(scene, /EffectComposer/);
@@ -102,6 +106,8 @@ test("keeps the experiment responsive, accessible, and self-contained", async ()
   assert.match(css, /mask-image:/);
   assert.match(css, /\.immersive-reel/);
   assert.match(css, /\.cinematic-hud/);
+  assert.match(css, /\.profile-copy > p:not/);
+  assert.match(css, /backdrop-filter: blur\(12px\)/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.match(packageJson, /@react-three\/postprocessing/);
 

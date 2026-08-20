@@ -294,11 +294,13 @@ textarea:focus-visible {
 }
 
 .shot-index {
-  color: rgba(246, 242, 233, 0.64);
+  color: rgba(255, 248, 238, 0.84);
+  text-shadow: 0 1px 16px rgba(22, 31, 32, 0.82);
 }
 
 .eyebrow {
-  color: #b1ada4;
+  color: #f0d9c6;
+  text-shadow: 0 1px 16px rgba(22, 31, 32, 0.78);
 }
 
 .shot-arrival {
@@ -401,7 +403,7 @@ h2 em {
   justify-content: space-between;
   gap: 24px;
   margin: 0;
-  color: rgba(246, 242, 233, 0.58);
+  color: rgba(255, 248, 238, 0.8);
   font-size: 8px;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -441,9 +443,10 @@ h2 em {
 .services-statement > p:last-child {
   max-width: 540px;
   margin: 48px 0 0;
-  color: #c4c0b7;
-  font-size: 13px;
+  color: rgba(255, 248, 238, 0.9);
+  font-size: 14px;
   line-height: 1.85;
+  text-shadow: 0 2px 20px rgba(22, 31, 32, 0.72);
 }
 
 .cinematic-services {
@@ -469,7 +472,7 @@ h2 em {
 
 .cinematic-services span,
 .work-still figcaption > span {
-  color: var(--muted);
+  color: rgba(255, 248, 238, 0.76);
   font-size: 8px;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -488,9 +491,10 @@ h2 em {
 .cinematic-services p {
   max-width: 310px;
   margin: 0;
-  color: var(--muted);
-  font-size: 10px;
+  color: #d5ddda;
+  font-size: 11px;
   line-height: 1.7;
+  text-shadow: 0 2px 18px rgba(22, 31, 32, 0.68);
 }
 
 .shot-work {
@@ -528,9 +532,10 @@ h2 em {
   grid-column: 10 / 13;
   max-width: 360px;
   margin: 5px 0 0;
-  color: var(--muted);
-  font-size: 11px;
+  color: rgba(255, 248, 238, 0.9);
+  font-size: 12px;
   line-height: 1.8;
+  text-shadow: 0 2px 20px rgba(22, 31, 32, 0.76);
 }
 
 .immersive-reel {
@@ -624,6 +629,12 @@ h2 em {
   text-transform: uppercase;
 }
 
+.hud-frame {
+  padding: 14px 16px;
+  background: linear-gradient(90deg, rgba(28, 36, 38, 0.58), rgba(28, 36, 38, 0.12) 72%, transparent);
+  backdrop-filter: blur(7px);
+}
+
 .hud-frame h3 {
   margin: 14px 0 12px;
   font-family: var(--serif);
@@ -636,6 +647,10 @@ h2 em {
 .hud-note {
   max-width: 410px;
   margin: 0;
+  padding: 14px 16px;
+  border-left: 2px solid rgba(241, 160, 126, 0.86);
+  background: rgba(28, 36, 38, 0.58);
+  backdrop-filter: blur(10px);
   font-family: var(--serif);
   font-size: clamp(16px, 1.25vw, 21px);
   line-height: 1.45;
@@ -659,7 +674,13 @@ h2 em {
 
 .shot-profile {
   min-height: 130svh;
-  background: linear-gradient(90deg, rgba(31, 39, 40, 0.66), rgba(31, 39, 40, 0.16) 72%, transparent);
+  background: linear-gradient(
+    90deg,
+    rgba(28, 36, 38, 0.94) 0%,
+    rgba(28, 36, 38, 0.8) 60%,
+    rgba(28, 36, 38, 0.44) 82%,
+    rgba(28, 36, 38, 0.12) 100%
+  );
 }
 
 .profile-frame {
@@ -695,14 +716,20 @@ h2 em {
 .profile-copy > p:not(.eyebrow):not(.profile-lead) {
   max-width: 600px;
   margin: 0;
-  color: #d2d5d0;
-  font-size: 11px;
-  line-height: 1.85;
+  color: rgba(255, 248, 238, 0.94);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.8;
+  text-shadow: 0 2px 18px rgba(22, 31, 32, 0.82);
 }
 
 .profile-facts {
   margin: 54px 0 0;
+  padding: 0 18px;
   border-top: 1px solid var(--line-strong);
+  background: rgba(28, 36, 38, 0.6);
+  box-shadow: 0 24px 60px rgba(22, 31, 32, 0.2);
+  backdrop-filter: blur(12px);
 }
 
 .profile-facts > div {
@@ -723,7 +750,11 @@ h2 em {
 }
 
 .profile-facts dt {
-  color: var(--muted);
+  color: rgba(255, 248, 238, 0.76);
+}
+
+.profile-facts dd {
+  color: rgba(255, 248, 238, 0.98);
 }
 
 .shot-inquiry {
@@ -1231,6 +1262,10 @@ h2 em {
   .shot-services,
   .shot-profile {
     min-height: 115svh;
+  }
+
+  .shot-profile {
+    background: linear-gradient(90deg, rgba(28, 36, 38, 0.95), rgba(28, 36, 38, 0.74));
   }
 
   .shot-work {
