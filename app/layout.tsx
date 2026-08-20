@@ -21,12 +21,12 @@ async function getOrigin() {
 
 export const viewport: Viewport = {
   colorScheme: "dark",
-  themeColor: "#0e0d0b",
+  themeColor: "#202627",
 };
 
 export async function generateMetadata(): Promise<Metadata> {
   const origin = await getOrigin();
-  const socialImage = `${origin}/og-cinematic.png`;
+  const socialImage = `${origin}/og-daylight.png`;
 
   return {
     title,
@@ -86,7 +86,7 @@ export default async function RootLayout({
     "@type": "ProfessionalService",
     name: "FILMM/FORHER",
     url: origin,
-    image: `${origin}/og-cinematic.png`,
+    image: `${origin}/og-daylight.png`,
     description,
     founder: {
       "@type": "Person",

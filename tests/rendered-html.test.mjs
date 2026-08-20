@@ -41,7 +41,7 @@ test("server-renders the cinematic portfolio and booking experience", async () =
   assert.doesNotMatch(html, /Marissa personally reviews|She works across/);
   assert.match(html, /September 2026/);
   assert.match(html, /Request date/);
-  assert.match(html, /http:\/\/localhost:3000\/og-cinematic\.png/);
+  assert.match(html, /http:\/\/localhost:3000\/og-daylight\.png/);
   assert.match(html, /Skip to content/);
   assert.match(html, /application\/ld\+json/);
   assert.match(html, /ProfessionalService/);
@@ -83,9 +83,12 @@ test("keeps the experiment responsive, accessible, and self-contained", async ()
   assert.match(scene, /createFeatherTexture/);
   assert.match(scene, /alphaMap=\{featherTexture\}/);
   assert.match(scene, /MeshReflectorMaterial/);
+  assert.match(scene, /CatmullRomCurve3/);
+  assert.match(scene, /<Sky/);
+  assert.match(scene, /function CinematicHud/);
   assert.match(scene, /EffectComposer/);
   assert.match(scene, /<Bloom/);
-  assert.match(scene, /toneMappingExposure = 1\.02/);
+  assert.match(scene, /toneMappingExposure = 1\.12/);
   assert.doesNotMatch(`${page}${booking}${header}${layout}`, /\u2014|&mdash;/i);
   assert.match(layout, /generateMetadata/);
   assert.match(layout, /x-forwarded-host/);
@@ -97,12 +100,13 @@ test("keeps the experiment responsive, accessible, and self-contained", async ()
   assert.match(css, /\.cinematic-loader/);
   assert.match(css, /\.film-treatment/);
   assert.match(css, /mask-image:/);
-  assert.match(css, /\.spatial-chapter/);
+  assert.match(css, /\.immersive-reel/);
+  assert.match(css, /\.cinematic-hud/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.match(packageJson, /@react-three\/postprocessing/);
 
   await Promise.all([
     access(new URL("../public/marissa-portrait.png", import.meta.url)),
-    access(new URL("../public/og-cinematic.png", import.meta.url)),
+    access(new URL("../public/og-daylight.png", import.meta.url)),
   ]);
 });

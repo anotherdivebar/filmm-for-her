@@ -1,6 +1,6 @@
 "use client";
 
-import { MeshReflectorMaterial, RoundedBox, useProgress, useTexture } from "@react-three/drei";
+import { MeshReflectorMaterial, RoundedBox, Sky, useProgress, useTexture } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Bloom, EffectComposer, Noise, Vignette } from "@react-three/postprocessing";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
@@ -45,7 +45,44 @@ function createFeatherTexture(size = 128, feather = 0.16) {
 }
 
 const featherTexture = createFeatherTexture();
-const corridorDepths = [4, -4, -12, -20, -28, -36, -44];
+const reelFrames = [
+  ["Wichita Study I", "35mm / Double exposure", "A familiar skyline held between two exposures."],
+  ["Understructure", "35mm / Architecture", "Structure, interruption, and the soft geometry of daylight."],
+  ["Passing Figures", "35mm / Street", "A passing gesture preserved before the street settles again."],
+  ["Prairie Line", "35mm / Landscape", "Infrastructure meeting the open distance of the Kansas prairie."],
+] as const;
+
+const cameraCurve = new THREE.CatmullRomCurve3(
+  [
+    new THREE.Vector3(0, 0.25, 10),
+    new THREE.Vector3(1.5, 0.18, 5),
+    new THREE.Vector3(-2.9, 0.72, -9),
+    new THREE.Vector3(2.6, 0.18, -17.5),
+    new THREE.Vector3(-2.45, 0.58, -26),
+    new THREE.Vector3(2.1, 0.2, -34.5),
+    new THREE.Vector3(-0.6, 0.35, -44),
+    new THREE.Vector3(0, 0.28, -52),
+  ],
+  false,
+  "catmullrom",
+  0.42,
+);
+
+const targetCurve = new THREE.CatmullRomCurve3(
+  [
+    new THREE.Vector3(2.1, 0, 0),
+    new THREE.Vector3(2.2, 0, -0.5),
+    new THREE.Vector3(-1.6, 0, -15),
+    new THREE.Vector3(1.35, 0, -23),
+    new THREE.Vector3(-1.15, 0, -31),
+    new THREE.Vector3(1.25, 0, -39),
+    new THREE.Vector3(0, 0, -50),
+    new THREE.Vector3(0, 0, -59),
+  ],
+  false,
+  "catmullrom",
+  0.42,
+);
 
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(false);
@@ -90,10 +127,10 @@ function PhotoPlane({
         transparent
         opacity={0.98}
         depthWrite={false}
-        emissive="#9f9384"
+        emissive="#d8c9b6"
         emissiveMap={texture}
-        emissiveIntensity={0.14}
-        roughness={0.68}
+        emissiveIntensity={0.1}
+        roughness={0.64}
         metalness={0.02}
         side={THREE.DoubleSide}
       />
@@ -122,10 +159,17 @@ function PhotoPortal({
         smoothness={3}
         position={[0, 0, -0.16]}
       >
-        <meshStandardMaterial color="#181612" roughness={0.84} metalness={0.16} />
+        <meshPhysicalMaterial
+          color="#eee3d1"
+          transparent
+          opacity={0.16}
+          roughness={0.38}
+          metalness={0.04}
+          side={THREE.DoubleSide}
+        />
       </RoundedBox>
       <PhotoPlane url={url} scale={scale} />
-      <pointLight position={[0, 0.2, 1.8]} intensity={3.2} distance={8} decay={2} color={light} />
+      <pointLight position={[0, 0.2, 1.8]} intensity={2.6} distance={9} decay={2} color={light} />
     </group>
   );
 }
@@ -169,62 +213,72 @@ function Dust({ compact, reducedMotion }: { compact: boolean; reducedMotion: boo
   );
 }
 
-function GalleryShell({ compact }: { compact: boolean }) {
+function OpenSet({ compact }: { compact: boolean }) {
   return (
     <group>
-      <mesh position={[0, -2.8, -20]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[14, 62]} />
+      <Sky
+        distance={450000}
+        sunPosition={[18, 7, -28]}
+        turbidity={7.5}
+        rayleigh={1.25}
+        mieCoefficient={0.007}
+        mieDirectionalG={0.81}
+      />
+
+      <mesh position={[0, -3, -22]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[90, 112]} />
         <MeshReflectorMaterial
           resolution={compact ? 256 : 512}
-          blur={compact ? [90, 34] : [280, 96]}
-          mixBlur={1.4}
-          mixStrength={compact ? 0.12 : 0.26}
-          roughness={0.88}
-          depthScale={0.28}
-          minDepthThreshold={0.35}
-          maxDepthThreshold={1.3}
-          color="#171510"
-          metalness={0.16}
+          blur={compact ? [80, 28] : [240, 84]}
+          mixBlur={1.2}
+          mixStrength={compact ? 0.08 : 0.2}
+          roughness={0.92}
+          depthScale={0.18}
+          minDepthThreshold={0.4}
+          maxDepthThreshold={1.4}
+          color="#777f7d"
+          metalness={0.06}
         />
       </mesh>
 
-      <mesh position={[-7, 1, -20]} rotation={[0, Math.PI / 2, 0]}>
-        <planeGeometry args={[62, 8]} />
-        <meshStandardMaterial color="#211e19" roughness={0.92} metalness={0.04} side={THREE.DoubleSide} />
-      </mesh>
-      <mesh position={[7, 1, -20]} rotation={[0, -Math.PI / 2, 0]}>
-        <planeGeometry args={[62, 8]} />
-        <meshStandardMaterial color="#211e19" roughness={0.92} metalness={0.04} side={THREE.DoubleSide} />
-      </mesh>
-      <mesh position={[0, 4.8, -20]} rotation={[Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[14, 62]} />
-        <meshStandardMaterial color="#171511" roughness={0.94} side={THREE.DoubleSide} />
-      </mesh>
+      <RoundedBox args={[17, 0.8, 5.5]} radius={0.32} smoothness={3} position={[-10, -2.65, -15]} rotation={[0, -0.16, 0]}>
+        <meshStandardMaterial color="#aaa9a2" roughness={0.9} />
+      </RoundedBox>
+      <RoundedBox args={[19, 0.5, 4]} radius={0.24} smoothness={3} position={[9, -2.72, -34]} rotation={[0, 0.12, 0]}>
+        <meshStandardMaterial color="#b6ada1" roughness={0.88} />
+      </RoundedBox>
 
-      {corridorDepths.map((depth, index) => (
-        <group key={depth} position={[0, 0, depth]}>
-          <mesh position={[0, 4.18, 0]}>
-            <boxGeometry args={[7.4, 0.045, 0.14]} />
+      <RoundedBox args={[3.6, 12, 2.8]} radius={0.22} smoothness={4} position={[-11, 2.8, -8]} rotation={[0, 0.18, -0.025]}>
+        <meshStandardMaterial color="#9fa8a6" roughness={0.82} metalness={0.04} />
+      </RoundedBox>
+      <RoundedBox args={[4.6, 8.8, 2.6]} radius={0.2} smoothness={4} position={[10.5, 1.4, -22]} rotation={[0, -0.2, 0.018]}>
+        <meshStandardMaterial color="#c47b69" roughness={0.84} metalness={0.03} />
+      </RoundedBox>
+      <RoundedBox args={[3.2, 14, 3]} radius={0.22} smoothness={4} position={[-11.5, 3.8, -37]} rotation={[0, 0.14, -0.018]}>
+        <meshStandardMaterial color="#b9b5aa" roughness={0.86} metalness={0.04} />
+      </RoundedBox>
+      <RoundedBox args={[5.2, 10, 2.4]} radius={0.22} smoothness={4} position={[11.2, 2, -49]} rotation={[0, -0.12, 0.02]}>
+        <meshStandardMaterial color="#7c8f98" roughness={0.82} metalness={0.05} />
+      </RoundedBox>
+
+      {[-10, -26, -42].map((depth, index) => (
+        <group key={depth} position={[index % 2 === 0 ? 5.8 : -5.8, 0.3, depth]}>
+          <mesh rotation={[0, index % 2 === 0 ? -0.12 : 0.12, 0]}>
+            <boxGeometry args={[0.08, 8.2, 3.8]} />
             <meshStandardMaterial
-              color="#d8cfbd"
-              emissive="#d8cfbd"
-              emissiveIntensity={index % 2 === 0 ? 4.2 : 2.6}
+              color={index === 1 ? "#e2a475" : "#e9dfcb"}
+              emissive={index === 1 ? "#d77c51" : "#f1d8ad"}
+              emissiveIntensity={compact ? 0.7 : 1.5}
               toneMapped={false}
             />
           </mesh>
           <pointLight
-            position={[index % 2 === 0 ? -1.8 : 1.8, 3.4, 0.8]}
-            intensity={compact ? 1.4 : 2.5}
-            distance={9}
+            position={[index % 2 === 0 ? -1.2 : 1.2, 1.2, 0]}
+            intensity={compact ? 2 : 4}
+            distance={12}
             decay={2}
-            color={index % 3 === 0 ? "#c8a18f" : "#dfd6c6"}
+            color={index === 1 ? "#e98b65" : "#ffd9a4"}
           />
-          <RoundedBox args={[1.1, 7.2, 1.1]} radius={0.08} smoothness={2} position={[-6.05, 0.55, 0]}>
-            <meshStandardMaterial color="#28241e" roughness={0.86} metalness={0.08} />
-          </RoundedBox>
-          <RoundedBox args={[1.1, 7.2, 1.1]} radius={0.08} smoothness={2} position={[6.05, 0.55, 0]}>
-            <meshStandardMaterial color="#28241e" roughness={0.86} metalness={0.08} />
-          </RoundedBox>
         </group>
       ))}
     </group>
@@ -233,72 +287,101 @@ function GalleryShell({ compact }: { compact: boolean }) {
 
 function DirectedSequence({ compact, reducedMotion }: { compact: boolean; reducedMotion: boolean }) {
   const cameraLight = useRef<THREE.PointLight>(null);
-  const lookTarget = useRef(new THREE.Vector3(0, 0, 0));
+  const desiredPosition = useRef(new THREE.Vector3(0, 0, 10));
+  const desiredTarget = useRef(new THREE.Vector3(2, 0, 0));
+  const reelElement = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    reelElement.current = document.querySelector<HTMLElement>(".immersive-reel");
+  }, []);
 
   useFrame(({ camera, pointer }, delta) => {
-    const scrollable = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-    const progress = Math.min(Math.max(window.scrollY / scrollable, 0), 1);
-    const desiredZ = 8 - progress * 52;
-    const desiredX = compact
-      ? Math.sin(progress * Math.PI * 4) * 0.12
-      : Math.sin(progress * Math.PI * 4) * 0.5 + pointer.x * 0.2;
-    const desiredY = compact ? 0 : pointer.y * 0.09 + Math.sin(progress * Math.PI * 2) * 0.08;
+    const reel = reelElement.current;
+    const scrollY = window.scrollY;
+    const documentTravel = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+    let progress = Math.min(Math.max(scrollY / documentTravel, 0), 1);
+
+    if (reel) {
+      const reelStart = reel.offsetTop;
+      const reelTravel = Math.max(reel.offsetHeight - window.innerHeight, 1);
+
+      if (scrollY < reelStart) {
+        progress = Math.min(scrollY / Math.max(reelStart, 1), 1) * 0.18;
+      } else if (scrollY <= reelStart + reelTravel) {
+        progress = 0.18 + ((scrollY - reelStart) / reelTravel) * 0.68;
+      } else {
+        const afterTravel = Math.max(documentTravel - reelStart - reelTravel, 1);
+        progress = 0.86 + Math.min((scrollY - reelStart - reelTravel) / afterTravel, 1) * 0.14;
+      }
+    }
+
+    const easedProgress = progress * progress * (3 - 2 * progress);
+    cameraCurve.getPointAt(easedProgress, desiredPosition.current);
+    targetCurve.getPointAt(easedProgress, desiredTarget.current);
+
+    const pointerX = compact ? 0 : pointer.x * 0.18;
+    const pointerY = compact ? 0 : pointer.y * 0.08;
     const damping = reducedMotion ? 28 : 2.7;
 
-    camera.position.z = THREE.MathUtils.damp(camera.position.z, desiredZ, damping, delta);
-    camera.position.x = THREE.MathUtils.damp(camera.position.x, desiredX, damping, delta);
-    camera.position.y = THREE.MathUtils.damp(camera.position.y, desiredY, damping, delta);
-
-    lookTarget.current.set(camera.position.x * 0.15, -0.04, camera.position.z - 7.5);
-    camera.lookAt(lookTarget.current);
+    camera.position.x = THREE.MathUtils.damp(camera.position.x, desiredPosition.current.x + pointerX, damping, delta);
+    camera.position.y = THREE.MathUtils.damp(camera.position.y, desiredPosition.current.y + pointerY, damping, delta);
+    camera.position.z = THREE.MathUtils.damp(camera.position.z, desiredPosition.current.z, damping, delta);
+    camera.lookAt(desiredTarget.current);
+    camera.rotation.z = THREE.MathUtils.damp(
+      camera.rotation.z,
+      reducedMotion ? 0 : Math.sin(progress * Math.PI * 5) * 0.008,
+      3.2,
+      delta,
+    );
 
     if (cameraLight.current) {
-      cameraLight.current.position.set(camera.position.x - 1.4, camera.position.y + 1.6, camera.position.z + 1.4);
+      cameraLight.current.position.set(camera.position.x - 1.2, camera.position.y + 1.7, camera.position.z + 1.8);
     }
   });
 
   return (
     <>
-      <color attach="background" args={["#0e0d0b"]} />
-      <fog attach="fog" args={["#0e0d0b", 8, 23]} />
-      <ambientLight intensity={0.26} color="#9f9585" />
-      <hemisphereLight intensity={0.38} color="#d9d0c0" groundColor="#201a17" />
-      <pointLight ref={cameraLight} intensity={5.8} distance={13} decay={2} color="#decfba" />
-      <pointLight position={[-4, 0, -17]} intensity={5} distance={12} color="#7d2c36" />
-      <pointLight position={[4, 0, -31]} intensity={4.5} distance={12} color="#967160" />
+      <color attach="background" args={["#a9b5b3"]} />
+      <fog attach="fog" args={["#9aa9a7", 18, 64]} />
+      <ambientLight intensity={0.62} color="#d6dbe0" />
+      <hemisphereLight intensity={1.15} color="#bed3dd" groundColor="#756f68" />
+      <directionalLight position={[11, 12, 4]} intensity={2.8} color="#ffe0ad" />
+      <pointLight ref={cameraLight} intensity={3.8} distance={16} decay={2} color="#f6cfa2" />
+      <pointLight position={[-5, 1, -17]} intensity={3.6} distance={14} color="#df7664" />
+      <pointLight position={[5, 1, -34]} intensity={3.2} distance={15} color="#91b8c7" />
 
-      <GalleryShell compact={compact} />
+      <OpenSet compact={compact} />
       <Dust compact={compact} reducedMotion={reducedMotion} />
 
       <PhotoPortal
         url="/marissa-portrait.png"
-        position={compact ? [0.8, -0.1, 0] : [2.3, -0.05, 0]}
+        position={compact ? [0.8, -0.1, 0] : [2.25, -0.05, 0]}
         rotation={[0, compact ? -0.03 : -0.1, 0]}
         scale={compact ? [4.2, 4.2, 1] : [5, 5, 1]}
       />
       <PhotoPortal
         url="/wichita-city.png"
-        position={compact ? [-0.4, 0.05, -18] : [-1.7, 0.12, -18]}
+        position={compact ? [-0.4, 0.05, -15] : [-1.65, 0.12, -15]}
         rotation={[0, compact ? 0.02 : 0.09, -0.01]}
         scale={compact ? [5.2, 3.45, 1] : [6.5, 4.3, 1]}
         light="#d7b7a6"
       />
       <PhotoPortal
         url="/parking-structure.png"
-        position={compact ? [0.35, 0, -25] : [1.5, 0.08, -25]}
+        position={compact ? [0.35, 0, -23] : [1.45, 0.08, -23]}
         rotation={[0, compact ? -0.02 : -0.08, 0]}
         scale={compact ? [5.2, 3.45, 1] : [6.4, 4.25, 1]}
       />
       <PhotoPortal
         url="/city-riders.png"
-        position={compact ? [-0.25, -0.05, -32] : [-1.35, -0.08, -32]}
+        position={compact ? [-0.25, -0.05, -31] : [-1.3, -0.08, -31]}
         rotation={[0, compact ? 0.02 : 0.08, 0]}
         scale={compact ? [5.15, 3.45, 1] : [6.35, 4.25, 1]}
         light="#d8ad96"
       />
       <PhotoPortal
         url="/kansas-prairie.png"
-        position={compact ? [0.35, 0.05, -39] : [1.45, 0.12, -39]}
+        position={compact ? [0.35, 0.05, -39] : [1.4, 0.12, -39]}
         rotation={[0, compact ? -0.02 : -0.08, 0]}
         scale={compact ? [5.2, 3.45, 1] : [6.4, 4.25, 1]}
         light="#c8c1a8"
@@ -316,12 +399,69 @@ function CinematicWorld() {
       <DirectedSequence compact={compact} reducedMotion={reducedMotion} />
       {!compact && !reducedMotion ? (
         <EffectComposer multisampling={0} enableNormalPass={false}>
-          <Bloom intensity={0.3} luminanceThreshold={0.82} luminanceSmoothing={0.74} mipmapBlur />
-          <Noise blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.035} premultiply />
-          <Vignette eskil={false} offset={0.22} darkness={0.58} />
+          <Bloom intensity={0.18} luminanceThreshold={0.78} luminanceSmoothing={0.8} mipmapBlur />
+          <Noise blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.018} premultiply />
+          <Vignette eskil={false} offset={0.18} darkness={0.28} />
         </EffectComposer>
       ) : null}
     </>
+  );
+}
+
+function CinematicHud() {
+  const hud = useRef<HTMLDivElement>(null);
+  const [activeFrame, setActiveFrame] = useState(0);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    let animationFrame = 0;
+
+    const update = () => {
+      animationFrame = 0;
+      const reel = document.querySelector<HTMLElement>(".immersive-reel");
+      if (!reel) return;
+
+      const reelStart = reel.offsetTop;
+      const reelTravel = Math.max(reel.offsetHeight - window.innerHeight, 1);
+      const progress = Math.min(Math.max((window.scrollY - reelStart) / reelTravel, 0), 1);
+      const nextFrame = Math.min(Math.floor(progress * reelFrames.length), reelFrames.length - 1);
+      const shouldShow =
+        window.scrollY >= reelStart - window.innerHeight * 0.12 &&
+        window.scrollY <= reelStart + reelTravel + window.innerHeight * 0.12;
+
+      hud.current?.style.setProperty("--reel-progress", progress.toString());
+      setActiveFrame(nextFrame);
+      setVisible(shouldShow);
+    };
+
+    const scheduleUpdate = () => {
+      if (animationFrame) return;
+      animationFrame = window.requestAnimationFrame(update);
+    };
+
+    scheduleUpdate();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+    };
+  }, []);
+
+  const frame = reelFrames[activeFrame];
+
+  return (
+    <div ref={hud} className={`cinematic-hud ${visible ? "is-visible" : ""}`} aria-hidden="true">
+      <div className="hud-frame">
+        <p>Selected work / {String(activeFrame + 1).padStart(2, "0")}</p>
+        <h3>{frame[0]}</h3>
+        <span>{frame[1]}</span>
+      </div>
+      <p className="hud-note">{frame[2]}</p>
+      <div className="hud-progress"><i /></div>
+    </div>
   );
 }
 
@@ -365,7 +505,7 @@ export function CinematicScene() {
           gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
           onCreated={({ gl }) => {
             gl.toneMapping = THREE.ACESFilmicToneMapping;
-            gl.toneMappingExposure = 1.02;
+            gl.toneMappingExposure = 1.12;
             gl.outputColorSpace = THREE.SRGBColorSpace;
             setWebglReady(true);
           }}
@@ -375,6 +515,7 @@ export function CinematicScene() {
           </Suspense>
         </Canvas>
       </div>
+      <CinematicHud />
       <CinematicLoader />
       <div className="film-treatment" aria-hidden="true" />
     </>

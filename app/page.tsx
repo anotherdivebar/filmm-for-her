@@ -104,32 +104,28 @@ export default function Home() {
             <h2>Work, in<br /><em>sequence.</em></h2>
             <p>Four studies made across Wichita and the Midwest, encountered one frame at a time.</p>
           </div>
-          <div className="work-sequence">
-            {work.map((item, index) => (
-              <article className="spatial-chapter" key={item.src}>
-                <div className="chapter-fallback" aria-hidden="true">
+          <div className="immersive-reel">
+            <div className="reel-fallback-grid" aria-hidden="true">
+              {work.map((item) => (
+                <figure key={item.src}>
                   <Image
                     src={item.src}
                     alt=""
                     fill
                     quality={88}
-                    sizes="(max-width: 700px) 88vw, 62vw"
+                    sizes="(max-width: 700px) 46vw, 32vw"
                   />
-                </div>
-                <div className="chapter-copy">
-                  <p className="chapter-kicker">
-                    Sequence {String(index + 1).padStart(2, "0")} / {item.medium}
-                  </p>
-                  <h3>{item.title}</h3>
-                  <p>{item.note}</p>
-                  <div className="chapter-record">
-                    <span>Frame {String(index + 1).padStart(2, "0")}</span>
-                    <span>Marissa Reynolds</span>
-                  </div>
-                </div>
-                <p className="visually-hidden">{item.alt}</p>
-              </article>
-            ))}
+                </figure>
+              ))}
+            </div>
+            <ol className="visually-hidden">
+              {work.map((item) => (
+                <li key={item.src}>
+                  {item.title}. {item.medium}. {item.alt} {item.note}
+                </li>
+              ))}
+            </ol>
+            <p className="reel-instruction" aria-hidden="true">Move through the sequence</p>
           </div>
         </section>
 
