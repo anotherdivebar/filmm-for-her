@@ -79,6 +79,9 @@ test("keeps the experiment responsive, accessible, and self-contained", async ()
   assert.match(scene, /useFrame/);
   assert.match(scene, /prefers-reduced-motion: reduce/);
   assert.match(scene, /\/marissa-portrait\.png/);
+  assert.match(scene, /createFeatherTexture/);
+  assert.match(scene, /alphaMap=\{featherTexture\}/);
+  assert.match(scene, /toneMappingExposure = 1\.06/);
   assert.doesNotMatch(`${page}${booking}${header}${layout}`, /\u2014|&mdash;/i);
   assert.match(layout, /generateMetadata/);
   assert.match(layout, /x-forwarded-host/);
@@ -89,6 +92,7 @@ test("keeps the experiment responsive, accessible, and self-contained", async ()
   assert.match(css, /\.skip-link/);
   assert.match(css, /\.cinematic-loader/);
   assert.match(css, /\.film-treatment/);
+  assert.match(css, /mask-image:/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
 
   await Promise.all([

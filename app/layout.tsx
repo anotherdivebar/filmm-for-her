@@ -21,7 +21,7 @@ async function getOrigin() {
 
 export const viewport: Viewport = {
   colorScheme: "dark",
-  themeColor: "#050504",
+  themeColor: "#0e0d0b",
 };
 
 export async function generateMetadata(): Promise<Metadata> {

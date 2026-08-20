@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --black: #050504;
-  --black-raised: #0b0b0a;
+  --black: #0e0d0b;
+  --black-raised: #171411;
   --paper: #eeeae1;
   --white: #f6f2e9;
   --muted: #98948b;
@@ -109,8 +109,8 @@ textarea:focus-visible {
   background-image: url("/marissa-portrait.png");
   background-position: 78% center;
   background-size: cover;
-  opacity: 0.18;
-  filter: grayscale(1) contrast(1.2);
+  opacity: 0.27;
+  filter: grayscale(1) contrast(1.08) brightness(1.12);
 }
 
 .cinematic-canvas {
@@ -119,8 +119,8 @@ textarea:focus-visible {
 
 .film-treatment {
   z-index: 20;
-  box-shadow: inset 0 0 190px rgba(0, 0, 0, 0.78);
-  opacity: 0.66;
+  box-shadow: inset 0 0 170px rgba(0, 0, 0, 0.48);
+  opacity: 0.48;
 }
 
 .film-treatment::before {
@@ -136,7 +136,7 @@ textarea:focus-visible {
   background-size: 7px 7px;
   content: "";
   mix-blend-mode: soft-light;
-  opacity: 0.11;
+  opacity: 0.08;
   transform: rotate(0.01deg);
 }
 
@@ -147,7 +147,7 @@ textarea:focus-visible {
   display: grid;
   place-items: center;
   overflow: hidden;
-  background: #020202;
+  background: var(--black);
   transition: opacity 900ms cubic-bezier(0.65, 0, 0.35, 1), visibility 900ms;
 }
 
@@ -202,7 +202,7 @@ textarea:focus-visible {
   justify-content: space-between;
   padding: 0 3.5vw;
   border-bottom: 1px solid rgba(246, 242, 233, 0.16);
-  background: rgba(5, 5, 4, 0.68);
+  background: rgba(14, 13, 11, 0.74);
   backdrop-filter: blur(14px);
 }
 
@@ -301,7 +301,7 @@ textarea:focus-visible {
   grid-template-rows: auto 1fr auto;
   align-items: end;
   gap: 28px 8vw;
-  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.88);
+  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.62);
 }
 
 .hero-frame > .shot-index {
@@ -392,7 +392,7 @@ h2 em {
 
 .shot-services {
   min-height: 145svh;
-  background: rgba(5, 5, 4, 0.34);
+  background: rgba(14, 13, 11, 0.26);
 }
 
 .services-frame {
@@ -477,7 +477,7 @@ h2 em {
   z-index: 12;
   min-height: 0;
   padding: 130px 4.5vw 150px;
-  background: #080807;
+  background: #11100e;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
@@ -523,13 +523,19 @@ h2 em {
 .still-image {
   position: relative;
   overflow: hidden;
-  background: #11110f;
+  background: var(--black);
 }
 
 .still-image::after {
   position: absolute;
   inset: 0;
-  border: 1px solid rgba(255, 255, 255, 0.11);
+  background: radial-gradient(
+    ellipse at center,
+    transparent 58%,
+    rgba(14, 13, 11, 0.08) 72%,
+    rgba(14, 13, 11, 0.72) 100%
+  );
+  box-shadow: inset 0 0 38px rgba(14, 13, 11, 0.36);
   content: "";
   pointer-events: none;
 }
@@ -537,7 +543,15 @@ h2 em {
 .work-still img {
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  filter: saturate(0.72) contrast(1.07) brightness(0.86);
+  filter: saturate(0.76) contrast(1.03) brightness(0.98);
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 5%, #000 95%, transparent),
+    linear-gradient(to bottom, transparent, #000 5%, #000 95%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  mask-image:
+    linear-gradient(to right, transparent, #000 5%, #000 95%, transparent),
+    linear-gradient(to bottom, transparent, #000 5%, #000 95%, transparent);
   transition: filter 500ms ease, transform 900ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
@@ -552,7 +566,7 @@ h2 em {
 }
 
 .work-still:hover img {
-  filter: saturate(0.92) contrast(1.03) brightness(0.96);
+  filter: saturate(0.94) contrast(1.02) brightness(1.05);
   transform: scale(1.018);
 }
 
@@ -657,7 +671,7 @@ h2 em {
   gap: 7vw;
   align-items: start;
   padding: 140px 5vw;
-  background: #0a0a09;
+  background: #12100e;
   border-top: 1px solid var(--line);
 }
 
@@ -684,7 +698,7 @@ h2 em {
   min-height: 760px;
   padding: clamp(28px, 4vw, 62px);
   border: 1px solid var(--line-strong);
-  background: #0d0d0c;
+  background: #171411;
 }
 
 .calendar-head {
@@ -948,7 +962,7 @@ h2 em {
 
 .site-footer {
   padding: 110px 4.5vw 34px;
-  background: #050504;
+  background: #0e0d0b;
   border-top: 1px solid var(--line);
 }
 
@@ -1016,7 +1030,7 @@ h2 em {
     display: grid;
     min-width: 225px;
     border: 1px solid var(--line-strong);
-    background: #090908;
+    background: #171411;
   }
 
   .mobile-menu nav a {

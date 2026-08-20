@@ -5,6 +5,40 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
+function createFeatherTexture(size = 128, feather = 0.17) {
+  const pixels = new Uint8Array(size * size * 4);
+
+  for (let y = 0; y < size; y += 1) {
+    for (let x = 0; x < size; x += 1) {
+      const horizontal = Math.min((x + 0.5) / size, 1 - (x + 0.5) / size);
+      const vertical = Math.min((y + 0.5) / size, 1 - (y + 0.5) / size);
+      const distance = Math.min(horizontal, vertical);
+      const normalized = Math.min(distance / feather, 1);
+      const opacity = normalized * normalized * (3 - 2 * normalized);
+      const value = Math.round(opacity * 255);
+      const offset = (y * size + x) * 4;
+
+      pixels[offset] = value;
+      pixels[offset + 1] = value;
+      pixels[offset + 2] = value;
+      pixels[offset + 3] = 255;
+    }
+  }
+
+  const texture = new THREE.DataTexture(
+    pixels,
+    size,
+    size,
+    THREE.RGBAFormat,
+  );
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.needsUpdate = true;
+  return texture;
+}
+
+const featherTexture = createFeatherTexture();
+
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(false);
 
@@ -48,7 +82,14 @@ function PhotoPlane({
       <planeGeometry args={[1, 1, 16, 16]} />
       <meshStandardMaterial
         map={texture}
-        roughness={0.76}
+        alphaMap={featherTexture}
+        transparent
+        opacity={0.98}
+        depthWrite={false}
+        emissive="#9d9182"
+        emissiveMap={texture}
+        emissiveIntensity={0.16}
+        roughness={0.7}
         metalness={0.02}
         side={THREE.DoubleSide}
       />
@@ -142,19 +183,19 @@ function DirectedSequence() {
 
   return (
     <>
-      <color attach="background" args={["#050504"]} />
-      <fog attach="fog" args={["#050504", 6, 15]} />
-      <ambientLight intensity={0.11} color="#81796a" />
+      <color attach="background" args={["#0e0d0b"]} />
+      <fog attach="fog" args={["#0e0d0b", 7.5, 18]} />
+      <ambientLight intensity={0.23} color="#9d927f" />
       <spotLight
         ref={keyLight}
         position={[3.5, 4.5, 6]}
         angle={0.42}
         penumbra={0.85}
-        intensity={36}
+        intensity={48}
         color="#f3eadc"
         distance={22}
       />
-      <pointLight position={[-4, -1, 3]} intensity={7} color="#681e29" distance={12} />
+      <pointLight position={[-4, -1, 3]} intensity={10} color="#7c2732" distance={14} />
       <Dust compact={compact} />
       <group ref={rig}>
         <PhotoPlane
@@ -177,11 +218,11 @@ function DirectedSequence() {
         />
         <mesh position={[-3.8, -0.2, -3.1]} rotation={[0, 0.34, 0]} scale={[1.6, 7, 1]}>
           <planeGeometry />
-          <meshStandardMaterial color="#090908" roughness={0.92} />
+          <meshStandardMaterial color="#13110f" roughness={0.92} />
         </mesh>
         <mesh position={[4.2, 0.1, -8.8]} rotation={[0, -0.31, 0]} scale={[1.8, 7, 1]}>
           <planeGeometry />
-          <meshStandardMaterial color="#0a0a09" roughness={0.92} />
+          <meshStandardMaterial color="#141210" roughness={0.92} />
         </mesh>
       </group>
     </>
@@ -220,7 +261,7 @@ export function CinematicScene() {
           gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
           onCreated={({ gl }) => {
             gl.toneMapping = THREE.ACESFilmicToneMapping;
-            gl.toneMappingExposure = 0.82;
+            gl.toneMappingExposure = 1.06;
           }}
         >
           <Suspense fallback={null}>
