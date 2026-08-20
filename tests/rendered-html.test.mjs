@@ -23,7 +23,7 @@ async function render() {
   );
 }
 
-test("server-renders the editorial portfolio and booking experience", async () => {
+test("server-renders the cinematic portfolio and booking experience", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
@@ -31,14 +31,16 @@ test("server-renders the editorial portfolio and booking experience", async () =
   const html = await response.text();
   assert.match(html, /<title>FILMM\/FORHER \| Photography by Marissa Reynolds<\/title>/i);
   assert.match(html, /Images/);
-  assert.match(html, /with <em>weight\.<\/em>/);
+  assert.match(html, /Images<br\/><em>with weight\.<\/em>/);
+  assert.match(html, /Direction/);
+  assert.match(html, /Proof,/);
   assert.match(html, /Executive portraiture/);
   assert.match(html, /I photograph people, work, and gatherings\./);
   assert.match(html, /I personally review and confirm every request!/);
   assert.doesNotMatch(html, /Marissa personally reviews|She works across/);
   assert.match(html, /September 2026/);
   assert.match(html, /Request date/);
-  assert.match(html, /http:\/\/localhost:3000\/og-serious\.png/);
+  assert.match(html, /http:\/\/localhost:3000\/og-cinematic\.png/);
   assert.match(html, /Skip to content/);
   assert.match(html, /application\/ld\+json/);
   assert.match(html, /ProfessionalService/);
@@ -47,9 +49,11 @@ test("server-renders the editorial portfolio and booking experience", async () =
   assert.doesNotMatch(html, /codex-preview|Starter Project|react-loading-skeleton/i);
 });
 
-test("keeps the finished site responsive, accessible, and self-contained", async () => {
-  const [page, booking, header, css, layout, packageJson] = await Promise.all([
+test("keeps the experiment responsive, accessible, and self-contained", async () => {
+  const [page, stage, scene, booking, header, css, layout, packageJson] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/cinematic-stage.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/cinematic-scene.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/booking-experience.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/site-header.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
@@ -64,20 +68,31 @@ test("keeps the finished site responsive, accessible, and self-contained", async
   assert.match(booking, /setRequestSent\(true\)/);
   assert.match(booking, /autoComplete="name"/);
   assert.match(booking, /Demonstration only\. No request is sent from this preview\./);
-  assert.match(page, /fetchPriority="high"/);
+  assert.match(page, /<CinematicStage \/>/);
+  assert.match(page, /from "next\/image"/);
   assert.match(page, /className="skip-link"/);
+  assert.match(stage, /^"use client";/);
+  assert.match(stage, /dynamic\(/);
+  assert.match(stage, /ssr: false/);
+  assert.match(scene, /^"use client";/);
+  assert.match(scene, /<Canvas/);
+  assert.match(scene, /useFrame/);
+  assert.match(scene, /prefers-reduced-motion: reduce/);
+  assert.match(scene, /\/marissa-portrait\.png/);
   assert.doesNotMatch(`${page}${booking}${header}${layout}`, /\u2014|&mdash;/i);
   assert.match(layout, /generateMetadata/);
   assert.match(layout, /x-forwarded-host/);
   assert.match(layout, /ProfessionalService/);
   assert.match(layout, /canonical/);
-  assert.match(css, /@media \(max-width: 560px\)/);
+  assert.match(css, /@media \(max-width: 620px\)/);
   assert.match(css, /prefers-reduced-motion: reduce/);
   assert.match(css, /\.skip-link/);
+  assert.match(css, /\.cinematic-loader/);
+  assert.match(css, /\.film-treatment/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
 
   await Promise.all([
     access(new URL("../public/marissa-portrait.png", import.meta.url)),
-    access(new URL("../public/og-serious.png", import.meta.url)),
+    access(new URL("../public/og-cinematic.png", import.meta.url)),
   ]);
 });

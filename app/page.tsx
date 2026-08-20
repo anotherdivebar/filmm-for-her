@@ -1,13 +1,14 @@
+import Image from "next/image";
 import { BookingExperience } from "./booking-experience";
+import { CinematicStage } from "./cinematic-stage";
 import { SiteHeader } from "./site-header";
 
-const portfolio = [
+const work = [
   {
     src: "/wichita-city.png",
     alt: "Double-exposed view of the Wichita skyline on 35mm film",
     title: "Wichita Study I",
     medium: "35mm / Double exposure",
-    className: "project project-wide",
     width: 968,
     height: 642,
   },
@@ -16,7 +17,6 @@ const portfolio = [
     alt: "Structural view through a shadowed parking garage",
     title: "Understructure",
     medium: "35mm / Architecture",
-    className: "project project-vertical",
     width: 906,
     height: 599,
   },
@@ -25,7 +25,6 @@ const portfolio = [
     alt: "Two motorcycle riders passing homes on a city street",
     title: "Passing Figures",
     medium: "35mm / Street",
-    className: "project project-standard",
     width: 907,
     height: 605,
   },
@@ -34,188 +33,136 @@ const portfolio = [
     alt: "Power lines receding into a green Kansas prairie",
     title: "Prairie Line",
     medium: "35mm / Landscape",
-    className: "project project-panorama",
     width: 909,
     height: 603,
   },
 ];
 
 const services = [
-  {
-    number: "01",
-    title: "Executive portraiture",
-    copy: "Individual headshots, environmental portraits, and consistent full-team photography. Directed with restraint and built around how each person actually carries themselves.",
-    detail: "Individuals / Teams / Portrait days",
-  },
-  {
-    number: "02",
-    title: "Events & organizations",
-    copy: "Clear coverage of the room, the work, and the people inside it. Designed for annual reports, communications, press, and the institutional archive.",
-    detail: "Conferences / Culture / Community",
-  },
-  {
-    number: "03",
-    title: "Editorial & commissions",
-    copy: "Image-led stories for artists, independent brands, publications, and ideas that need a less conventional point of view, on digital, 35mm, or both.",
-    detail: "Campaigns / Editorial / 35mm",
-  },
+  ["01", "Executive portraiture", "Individuals, leadership teams, and portrait days."],
+  ["02", "Events & organizations", "Conferences, culture, community, and institutional stories."],
+  ["03", "Editorial & commissions", "Artists, publications, independent brands, and 35mm studies."],
 ];
 
 export default function Home() {
   return (
     <>
+      <CinematicStage />
       <a className="skip-link" href="#main-content">Skip to content</a>
       <SiteHeader />
-      <main id="main-content" tabIndex={-1}>
 
-      <section className="hero" id="top">
-        <div className="hero-copy">
-          <p className="kicker">Marissa Reynolds / Photographer</p>
-          <h1>Images<br />with <em>weight.</em></h1>
-          <div className="hero-summary">
+      <main className="cinematic-page" id="main-content" tabIndex={-1}>
+        <section className="shot shot-arrival" id="top">
+          <div className="shot-frame hero-frame">
+            <p className="shot-index">Scene 01 / Arrival</p>
+            <div className="hero-title">
+              <p>Marissa Reynolds / Photographer</p>
+              <h1>Images<br /><em>with weight.</em></h1>
+            </div>
+            <div className="hero-coda">
+              <p>
+                Corporate portraiture, events, and independent work shaped with precision and the emotional texture of film.
+              </p>
+              <a className="cinematic-link" href="#work">Enter the work <span aria-hidden="true">&darr;</span></a>
+            </div>
+            <p className="frame-note">Wichita, Kansas / Available regionally</p>
+          </div>
+        </section>
+
+        <section className="shot shot-services" id="services">
+          <div className="shot-frame services-frame">
+            <p className="shot-index">Scene 02 / Direction</p>
+            <div className="services-statement">
+              <p className="eyebrow">A composed presence on set</p>
+              <h2>Direction<br /><em>without theater.</em></h2>
+              <p>
+                I make the room feel easy, then pay close attention. The result is clear enough for business and human enough to last.
+              </p>
+            </div>
+            <div className="cinematic-services" aria-label="Photography services">
+              {services.map(([number, title, detail]) => (
+                <article key={number}>
+                  <span>{number}</span>
+                  <h3>{title}</h3>
+                  <p>{detail}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="shot shot-work" id="work">
+          <div className="work-heading">
+            <p className="shot-index">Scene 03 / Selected work</p>
+            <h2>Proof,<br /><em>not performance.</em></h2>
+            <p>Commissioned and self-directed photographs made across Wichita and the Midwest.</p>
+          </div>
+          <div className="work-sequence">
+            {work.map((item, index) => (
+              <figure className="work-still" key={item.src}>
+                <div className="still-image">
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    width={item.width}
+                    height={item.height}
+                    loading="lazy"
+                    sizes="(max-width: 700px) 94vw, (max-width: 1100px) 78vw, 68vw"
+                  />
+                </div>
+                <figcaption>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.medium}</p>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+
+        <section className="shot shot-profile" id="about">
+          <div className="shot-frame profile-frame">
+            <p className="shot-index">Scene 04 / The photographer</p>
+            <div className="profile-copy">
+              <p className="eyebrow">Observant / Composed / Direct</p>
+              <h2>Marissa<br />Reynolds</h2>
+              <p className="profile-lead">
+                I photograph people, work, and gatherings. I am attentive to gesture, architecture, light, and the quiet tension that makes a frame last.
+              </p>
+              <p>
+                My practice moves between corporate headshots, organizational events, and self-directed 35mm work. Each commission is exact without becoming sterile and natural without becoming casual.
+              </p>
+              <dl className="profile-facts">
+                <div><dt>Based</dt><dd>Wichita, Kansas</dd></div>
+                <div><dt>Working in</dt><dd>Digital / 35mm</dd></div>
+                <div><dt>Available for</dt><dd>Local and regional work</dd></div>
+              </dl>
+            </div>
+          </div>
+        </section>
+
+        <section className="shot shot-inquiry" id="book">
+          <div className="inquiry-heading">
+            <p className="shot-index">Scene 05 / Closing shot</p>
+            <h2>Begin a<br /><em>conversation.</em></h2>
             <p>
-              Corporate portraiture, events, and independent work photographed with precision and the emotional texture of film.
+              Select an available date and send me a short project brief. I personally review and confirm every request!
             </p>
-            <a className="arrow-link" href="#work">View selected work <span>↓</span></a>
           </div>
-        </div>
-
-        <figure className="hero-figure">
-          <img
-            src="/marissa-portrait.png"
-            alt="Black-and-white portrait of a woman looking upward"
-            width={960}
-            height={959}
-            fetchPriority="high"
-            decoding="async"
-          />
-          <figcaption>
-            <span>Portrait 001</span>
-            <span>35mm / B&W</span>
-          </figcaption>
-        </figure>
-
-        <div className="hero-meta">
-          <p>Wichita, Kansas</p>
-          <p>Available for regional commissions</p>
-        </div>
-      </section>
-
-      <section className="statement" aria-label="Approach">
-        <p>Commercial clarity.</p>
-        <p>Human presence.</p>
-      </section>
-
-      <section className="work-section" id="work">
-        <div className="section-header">
-          <p className="section-index">01 / Selected work</p>
-          <h2>Observations,<br /><em>held still.</em></h2>
-          <p className="section-intro">
-            Commissioned and self-directed photographs made across Wichita and the Midwest. Digital when clarity matters; film when texture tells more.
-          </p>
-        </div>
-
-        <div className="project-grid">
-          {portfolio.map((item, index) => (
-            <figure className={item.className} key={item.src}>
-              <div className="project-image">
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  width={item.width}
-                  height={item.height}
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <figcaption>
-                <span className="project-number">{String(index + 1).padStart(2, "0")}</span>
-                <h3>{item.title}</h3>
-                <span>{item.medium}</span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
-
-      <section className="services-section" id="services">
-        <div className="section-header section-header-dark">
-          <p className="section-index">02 / Services</p>
-          <h2>Exacting images.<br /><em>No performance required.</em></h2>
-          <p className="section-intro">
-            Every commission begins with the same premise: understand the purpose, remove what is unnecessary, and make room for something honest.
-          </p>
-        </div>
-
-        <div className="service-list">
-          {services.map((service) => (
-            <article className="service-row" key={service.number}>
-              <span className="service-number">{service.number}</span>
-              <h3>{service.title}</h3>
-              <p>{service.copy}</p>
-              <span className="service-detail">{service.detail}</span>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="about-section" id="about">
-        <div className="about-visual">
-          <img
-            src="/parking-structure.png"
-            alt="Graphic architectural study through a parking structure"
-            width={906}
-            height={599}
-            loading="lazy"
-            decoding="async"
-          />
-          <span>MR / 2026</span>
-        </div>
-        <div className="about-copy">
-          <p className="section-index">03 / Profile</p>
-          <h2>Marissa<br />Reynolds</h2>
-          <p className="about-lead">
-            I photograph people, work, and gatherings. My approach is observant and composed, attentive to gesture, architecture, light, and the quiet tension that makes a frame last.
-          </p>
-          <p>
-            I work across corporate headshots, organizational events, and self-directed 35mm practice. I shape each commission to feel exact without becoming sterile, and natural without becoming casual.
-          </p>
-          <dl className="profile-details">
-            <div><dt>Based</dt><dd>Wichita, Kansas</dd></div>
-            <div><dt>Working in</dt><dd>Digital / 35mm</dd></div>
-            <div><dt>Available for</dt><dd>Local and regional work</dd></div>
-          </dl>
-          <a className="arrow-link" href="#book">Discuss a commission <span>↗</span></a>
-        </div>
-      </section>
-
-      <section className="booking-section" id="book">
-        <div className="booking-intro">
-          <p className="section-index">04 / Inquiries</p>
-          <h2>Begin a<br /><em>conversation.</em></h2>
-          <p>
-            Select an available date and send me a short project brief. I personally review and confirm every request!
-          </p>
-          <div className="booking-notes">
-            <p><span>For</span>Portraits, events, editorial, and creative commissions</p>
-            <p><span>Response</span>Within two business days</p>
-            <p><span>Travel</span>Available throughout the region</p>
-          </div>
-        </div>
-
-        <BookingExperience />
-      </section>
+          <BookingExperience />
+        </section>
       </main>
+
       <footer className="site-footer">
-        <div className="footer-title">
+        <div>
           <span>Photography by</span>
           <p>Marissa Reynolds</p>
         </div>
-        <div className="footer-bottom">
-          <a className="wordmark wordmark-footer" href="#top" aria-label="FILMM/FORHER home">FILMM<span>/</span>FORHER</a>
-          <p>Wichita, Kansas / Regional commissions</p>
-          <p>© 2026</p>
-          <a href="#book">Inquire <span>↑</span></a>
+        <div className="footer-line">
+          <a href="#top">FILMM/FORHER</a>
+          <span>Wichita, Kansas</span>
+          <span>&copy; 2026</span>
+          <a href="#book">Inquire <span aria-hidden="true">&uarr;</span></a>
         </div>
       </footer>
     </>
