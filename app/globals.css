@@ -540,7 +540,7 @@ h2 em {
 
 .immersive-reel {
   position: relative;
-  min-height: 430svh;
+  min-height: 360svh;
 }
 
 .reel-fallback-grid {
@@ -1283,7 +1283,7 @@ h2 em {
   }
 
   .immersive-reel {
-    min-height: 380svh;
+    min-height: 310svh;
   }
 
   .reel-fallback-grid {

@@ -1,10 +1,9 @@
 "use client";
 
-import { MeshReflectorMaterial, RoundedBox, Sky, useProgress, useTexture } from "@react-three/drei";
+import { MeshReflectorMaterial, RoundedBox, useProgress, useTexture } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Bloom, EffectComposer, Noise, Vignette } from "@react-three/postprocessing";
+import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { BlendFunction } from "postprocessing";
 import * as THREE from "three";
 
 const photoSources = [
@@ -81,6 +80,7 @@ const reelFrames = [
   ["Passing Figures", "35mm / Street", "A passing gesture preserved before the street settles again."],
   ["Prairie Line", "35mm / Landscape", "Infrastructure meeting the open distance of the Kansas prairie."],
 ] as const;
+const reelFrameStarts = [0, 0.28, 0.57, 0.86] as const;
 
 const cameraCurve = new THREE.CatmullRomCurve3(
   [
@@ -138,6 +138,16 @@ function mapReelProgress(progress: number) {
   }
 
   return reelStops[reelStops.length - 1][1];
+}
+
+function getActiveReelFrame(progress: number) {
+  let activeFrame = 0;
+
+  for (let index = 1; index < reelFrameStarts.length; index += 1) {
+    if (progress >= reelFrameStarts[index]) activeFrame = index;
+  }
+
+  return activeFrame;
 }
 
 function useMediaQuery(query: string) {
@@ -214,7 +224,6 @@ function PhotoPortal({
         radius={0.04}
         smoothness={6}
         position={[0, 0, -0.16]}
-        castShadow
       >
         <meshPhysicalMaterial
           color="#eee3d1"
@@ -248,7 +257,7 @@ function ArchitecturalMonolith({
 
   return (
     <group position={position} rotation={rotation}>
-      <RoundedBox args={args} radius={0.22} smoothness={8} castShadow receiveShadow>
+      <RoundedBox args={args} radius={0.22} smoothness={8}>
         <meshStandardMaterial
           color={color}
           roughness={0.82}
@@ -260,13 +269,13 @@ function ArchitecturalMonolith({
       </RoundedBox>
 
       {[-0.28, 0.02, 0.32].map((ratio) => (
-        <mesh key={ratio} position={[0, height * ratio, depth / 2 + 0.035]} castShadow>
+        <mesh key={ratio} position={[0, height * ratio, depth / 2 + 0.08]}>
           <boxGeometry args={[width * 0.76, 0.028, 0.045]} />
           <meshStandardMaterial color={detail} transparent opacity={0.38} roughness={0.5} />
         </mesh>
       ))}
 
-      <mesh position={[width * 0.34, 0, depth / 2 + 0.036]} castShadow>
+      <mesh position={[width * 0.34, 0, depth / 2 + 0.08]}>
         <boxGeometry args={[0.035, height * 0.74, 0.045]} />
         <meshStandardMaterial color={detail} transparent opacity={0.3} roughness={0.5} />
       </mesh>
@@ -274,58 +283,15 @@ function ArchitecturalMonolith({
   );
 }
 
-function Dust({ compact, reducedMotion }: { compact: boolean; reducedMotion: boolean }) {
-  const points = useRef<THREE.Points>(null);
-  const positions = useMemo(() => {
-    const count = compact ? 90 : 220;
-    const values = new Float32Array(count * 3);
-
-    for (let index = 0; index < count; index += 1) {
-      const seed = index + 1;
-      values[index * 3] = Math.sin(seed * 12.9898) * 6.4;
-      values[index * 3 + 1] = Math.cos(seed * 4.1414) * 4;
-      values[index * 3 + 2] = -((seed * 3.17) % 54) + 7;
-    }
-
-    return values;
-  }, [compact]);
-
-  useFrame(({ clock }) => {
-    if (!points.current || reducedMotion) return;
-    points.current.rotation.y = clock.elapsedTime * 0.006;
-    points.current.position.y = Math.sin(clock.elapsedTime * 0.14) * 0.05;
-  });
-
-  return (
-    <points ref={points}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-      </bufferGeometry>
-      <pointsMaterial
-        color="#d8d1c2"
-        size={compact ? 0.014 : 0.019}
-        opacity={0.22}
-        transparent
-        depthWrite={false}
-        sizeAttenuation
-      />
-    </points>
-  );
-}
-
 function OpenSet({ compact }: { compact: boolean }) {
   return (
     <group>
-      <Sky
-        distance={450000}
-        sunPosition={[18, 7, -28]}
-        turbidity={7.5}
-        rayleigh={1.25}
-        mieCoefficient={0.007}
-        mieDirectionalG={0.81}
-      />
+      <mesh position={[0, 14, -20]} scale={80}>
+        <sphereGeometry args={[1, 48, 24]} />
+        <meshBasicMaterial color="#b7c3c1" side={THREE.BackSide} fog={false} />
+      </mesh>
 
-      <mesh position={[0, -3, -22]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+      <mesh position={[0, -3, -22]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[90, 112]} />
         <MeshReflectorMaterial
           resolution={compact ? 256 : 768}
@@ -341,10 +307,10 @@ function OpenSet({ compact }: { compact: boolean }) {
         />
       </mesh>
 
-      <RoundedBox args={[17, 0.8, 5.5]} radius={0.32} smoothness={6} position={[-10, -2.65, -15]} rotation={[0, -0.16, 0]} castShadow receiveShadow>
+      <RoundedBox args={[17, 0.8, 5.5]} radius={0.32} smoothness={6} position={[-10, -2.65, -15]} rotation={[0, -0.16, 0]}>
         <meshStandardMaterial color="#aaa9a2" roughness={0.9} />
       </RoundedBox>
-      <RoundedBox args={[19, 0.5, 4]} radius={0.24} smoothness={6} position={[9, -2.72, -34]} rotation={[0, 0.12, 0]} castShadow receiveShadow>
+      <RoundedBox args={[19, 0.5, 4]} radius={0.24} smoothness={6} position={[9, -2.72, -34]} rotation={[0, 0.12, 0]}>
         <meshStandardMaterial color="#b6ada1" roughness={0.88} />
       </RoundedBox>
 
@@ -448,25 +414,12 @@ function DirectedSequence({ compact, reducedMotion }: { compact: boolean; reduce
       <fog attach="fog" args={["#9aa9a7", 18, 64]} />
       <ambientLight intensity={0.62} color="#d6dbe0" />
       <hemisphereLight intensity={1.15} color="#bed3dd" groundColor="#756f68" />
-      <directionalLight
-        position={[11, 12, 4]}
-        intensity={2.8}
-        color="#ffe0ad"
-        castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-        shadow-camera-left={-26}
-        shadow-camera-right={26}
-        shadow-camera-top={24}
-        shadow-camera-bottom={-24}
-        shadow-camera-far={80}
-      />
+      <directionalLight position={[11, 12, 4]} intensity={2.8} color="#ffe0ad" />
       <pointLight ref={cameraLight} intensity={3.8} distance={16} decay={2} color="#f6cfa2" />
       <pointLight position={[-5, 1, -17]} intensity={3.6} distance={14} color="#df7664" />
       <pointLight position={[5, 1, -34]} intensity={3.2} distance={15} color="#91b8c7" />
 
       <OpenSet compact={compact} />
-      <Dust compact={compact} reducedMotion={reducedMotion} />
 
       <PhotoPortal
         url="/marissa-portrait.png"
@@ -515,7 +468,6 @@ function CinematicWorld() {
       {!compact && !reducedMotion ? (
         <EffectComposer multisampling={4} enableNormalPass={false}>
           <Bloom intensity={0.18} luminanceThreshold={0.78} luminanceSmoothing={0.8} mipmapBlur />
-          <Noise blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.018} premultiply />
           <Vignette eskil={false} offset={0.18} darkness={0.28} />
         </EffectComposer>
       ) : null}
@@ -539,7 +491,7 @@ function CinematicHud() {
       const reelStart = reel.offsetTop;
       const reelTravel = Math.max(reel.offsetHeight - window.innerHeight, 1);
       const progress = Math.min(Math.max((window.scrollY - reelStart) / reelTravel, 0), 1);
-      const nextFrame = Math.min(Math.floor(progress * reelFrames.length), reelFrames.length - 1);
+      const nextFrame = getActiveReelFrame(progress);
       const shouldShow =
         window.scrollY >= reelStart - window.innerHeight * 0.12 &&
         window.scrollY <= reelStart + reelTravel + window.innerHeight * 0.12;
@@ -615,7 +567,6 @@ export function CinematicScene() {
       <div className="cinematic-fallback" aria-hidden="true" />
       <div className="cinematic-canvas" aria-hidden="true">
         <Canvas
-          shadows
           camera={{ fov: 43, near: 0.1, far: 80, position: [0, 0, 8] }}
           dpr={[1, 1.65]}
           gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
@@ -623,8 +574,6 @@ export function CinematicScene() {
             gl.toneMapping = THREE.ACESFilmicToneMapping;
             gl.toneMappingExposure = 1.12;
             gl.outputColorSpace = THREE.SRGBColorSpace;
-            gl.shadowMap.enabled = true;
-            gl.shadowMap.type = THREE.PCFSoftShadowMap;
             setWebglReady(true);
           }}
         >

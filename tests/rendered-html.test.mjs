@@ -85,10 +85,11 @@ test("keeps the experiment responsive, accessible, and self-contained", async ()
   assert.match(scene, /MeshReflectorMaterial/);
   assert.match(scene, /CatmullRomCurve3/);
   assert.match(scene, /function mapReelProgress/);
+  assert.match(scene, /function getActiveReelFrame/);
   assert.match(scene, /smoothedProgress/);
   assert.match(scene, /function ArchitecturalMonolith/);
-  assert.match(scene, /PCFSoftShadowMap/);
-  assert.match(scene, /<Sky/);
+  assert.match(scene, /sphereGeometry/);
+  assert.doesNotMatch(scene, /<Noise|<Sky|function Dust/);
   assert.match(scene, /function CinematicHud/);
   assert.match(scene, /EffectComposer/);
   assert.match(scene, /<Bloom/);
