@@ -9,6 +9,7 @@ const work = [
     alt: "Double-exposed view of the Wichita skyline on 35mm film",
     title: "Wichita Study I",
     medium: "35mm / Double exposure",
+    note: "A familiar skyline held between two exposures and one uncertain moment.",
     width: 968,
     height: 642,
   },
@@ -17,6 +18,7 @@ const work = [
     alt: "Structural view through a shadowed parking garage",
     title: "Understructure",
     medium: "35mm / Architecture",
+    note: "Structure, interruption, and the soft geometry of daylight.",
     width: 906,
     height: 599,
   },
@@ -25,6 +27,7 @@ const work = [
     alt: "Two motorcycle riders passing homes on a city street",
     title: "Passing Figures",
     medium: "35mm / Street",
+    note: "A passing gesture preserved before the street settles again.",
     width: 907,
     height: 605,
   },
@@ -33,6 +36,7 @@ const work = [
     alt: "Power lines receding into a green Kansas prairie",
     title: "Prairie Line",
     medium: "35mm / Landscape",
+    note: "The measured distance between infrastructure and open land.",
     width: 909,
     height: 603,
   },
@@ -54,9 +58,9 @@ export default function Home() {
       <main className="cinematic-page" id="main-content" tabIndex={-1}>
         <section className="shot shot-arrival" id="top">
           <div className="shot-frame hero-frame">
-            <p className="shot-index">Scene 01 / Arrival</p>
+            <p className="shot-index">A FILMM/FORHER presentation / Scene 01</p>
             <div className="hero-title">
-              <p>Marissa Reynolds / Photographer</p>
+              <p>Marissa Reynolds / Photographer / Wichita, Kansas</p>
               <h1>Images<br /><em>with weight.</em></h1>
             </div>
             <div className="hero-coda">
@@ -65,13 +69,16 @@ export default function Home() {
               </p>
               <a className="cinematic-link" href="#work">Enter the work <span aria-hidden="true">&darr;</span></a>
             </div>
-            <p className="frame-note">Wichita, Kansas / Available regionally</p>
+            <p className="frame-note">
+              <span>Corporate / Editorial / 35mm</span>
+              <span>Scroll to move through the space</span>
+            </p>
           </div>
         </section>
 
         <section className="shot shot-services" id="services">
           <div className="shot-frame services-frame">
-            <p className="shot-index">Scene 02 / Direction</p>
+            <p className="shot-index">Scene 02 / The approach</p>
             <div className="services-statement">
               <p className="eyebrow">A composed presence on set</p>
               <h2>Direction<br /><em>without theater.</em></h2>
@@ -91,31 +98,37 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="shot shot-work" id="work">
+        <section className="shot shot-work" id="work" aria-label="Selected photography">
           <div className="work-heading">
-            <p className="shot-index">Scene 03 / Selected work</p>
-            <h2>Proof,<br /><em>not performance.</em></h2>
-            <p>Commissioned and self-directed photographs made across Wichita and the Midwest.</p>
+            <p className="shot-index">Scene 03 / The archive</p>
+            <h2>Work, in<br /><em>sequence.</em></h2>
+            <p>Four studies made across Wichita and the Midwest, encountered one frame at a time.</p>
           </div>
           <div className="work-sequence">
             {work.map((item, index) => (
-              <figure className="work-still" key={item.src}>
-                <div className="still-image">
+              <article className="spatial-chapter" key={item.src}>
+                <div className="chapter-fallback" aria-hidden="true">
                   <Image
                     src={item.src}
-                    alt={item.alt}
-                    width={item.width}
-                    height={item.height}
-                    loading="lazy"
-                    sizes="(max-width: 700px) 94vw, (max-width: 1100px) 78vw, 68vw"
+                    alt=""
+                    fill
+                    quality={88}
+                    sizes="(max-width: 700px) 88vw, 62vw"
                   />
                 </div>
-                <figcaption>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
+                <div className="chapter-copy">
+                  <p className="chapter-kicker">
+                    Sequence {String(index + 1).padStart(2, "0")} / {item.medium}
+                  </p>
                   <h3>{item.title}</h3>
-                  <p>{item.medium}</p>
-                </figcaption>
-              </figure>
+                  <p>{item.note}</p>
+                  <div className="chapter-record">
+                    <span>Frame {String(index + 1).padStart(2, "0")}</span>
+                    <span>Marissa Reynolds</span>
+                  </div>
+                </div>
+                <p className="visually-hidden">{item.alt}</p>
+              </article>
             ))}
           </div>
         </section>

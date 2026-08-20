@@ -33,7 +33,8 @@ test("server-renders the cinematic portfolio and booking experience", async () =
   assert.match(html, /Images/);
   assert.match(html, /Images<br\/><em>with weight\.<\/em>/);
   assert.match(html, /Direction/);
-  assert.match(html, /Proof,/);
+  assert.match(html, /Work, in/);
+  assert.match(html, /Wichita Study I/);
   assert.match(html, /Executive portraiture/);
   assert.match(html, /I photograph people, work, and gatherings\./);
   assert.match(html, /I personally review and confirm every request!/);
@@ -81,7 +82,10 @@ test("keeps the experiment responsive, accessible, and self-contained", async ()
   assert.match(scene, /\/marissa-portrait\.png/);
   assert.match(scene, /createFeatherTexture/);
   assert.match(scene, /alphaMap=\{featherTexture\}/);
-  assert.match(scene, /toneMappingExposure = 1\.06/);
+  assert.match(scene, /MeshReflectorMaterial/);
+  assert.match(scene, /EffectComposer/);
+  assert.match(scene, /<Bloom/);
+  assert.match(scene, /toneMappingExposure = 1\.02/);
   assert.doesNotMatch(`${page}${booking}${header}${layout}`, /\u2014|&mdash;/i);
   assert.match(layout, /generateMetadata/);
   assert.match(layout, /x-forwarded-host/);
@@ -93,7 +97,9 @@ test("keeps the experiment responsive, accessible, and self-contained", async ()
   assert.match(css, /\.cinematic-loader/);
   assert.match(css, /\.film-treatment/);
   assert.match(css, /mask-image:/);
+  assert.match(css, /\.spatial-chapter/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
+  assert.match(packageJson, /@react-three\/postprocessing/);
 
   await Promise.all([
     access(new URL("../public/marissa-portrait.png", import.meta.url)),
