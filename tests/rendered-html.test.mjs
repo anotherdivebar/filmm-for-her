@@ -86,6 +86,8 @@ test("keeps the experiment responsive, accessible, and self-contained", async ()
   assert.match(scene, /CatmullRomCurve3/);
   assert.match(scene, /function mapReelProgress/);
   assert.match(scene, /function getActiveReelFrame/);
+  assert.match(scene, /function getDocumentTop/);
+  assert.doesNotMatch(scene, /reel\.offsetTop/);
   assert.match(scene, /smoothedProgress/);
   assert.match(scene, /function ArchitecturalMonolith/);
   assert.match(scene, /sphereGeometry/);

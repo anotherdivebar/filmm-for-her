@@ -150,6 +150,10 @@ function getActiveReelFrame(progress: number) {
   return activeFrame;
 }
 
+function getDocumentTop(element: HTMLElement) {
+  return element.getBoundingClientRect().top + window.scrollY;
+}
+
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(false);
 
@@ -362,7 +366,7 @@ function DirectedSequence({ compact, reducedMotion }: { compact: boolean; reduce
     let rawProgress = Math.min(Math.max(scrollY / documentTravel, 0), 1);
 
     if (reel) {
-      const reelStart = reel.offsetTop;
+      const reelStart = getDocumentTop(reel);
       const reelTravel = Math.max(reel.offsetHeight - window.innerHeight, 1);
 
       if (scrollY < reelStart) {
@@ -488,7 +492,7 @@ function CinematicHud() {
       const reel = document.querySelector<HTMLElement>(".immersive-reel");
       if (!reel) return;
 
-      const reelStart = reel.offsetTop;
+      const reelStart = getDocumentTop(reel);
       const reelTravel = Math.max(reel.offsetHeight - window.innerHeight, 1);
       const progress = Math.min(Math.max((window.scrollY - reelStart) / reelTravel, 0), 1);
       const nextFrame = getActiveReelFrame(progress);
