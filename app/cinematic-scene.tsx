@@ -1,8 +1,7 @@
 "use client";
 
-import { MeshReflectorMaterial, RoundedBox, useProgress, useTexture } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
+import { RoundedBox, useProgress, useTexture } from "@react-three/drei";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
@@ -297,18 +296,7 @@ function OpenSet({ compact }: { compact: boolean }) {
 
       <mesh position={[0, -3, -22]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[90, 112]} />
-        <MeshReflectorMaterial
-          resolution={compact ? 256 : 768}
-          blur={compact ? [80, 28] : [240, 84]}
-          mixBlur={1.2}
-          mixStrength={compact ? 0.08 : 0.2}
-          roughness={0.92}
-          depthScale={0.18}
-          minDepthThreshold={0.4}
-          maxDepthThreshold={1.4}
-          color="#777f7d"
-          metalness={0.06}
-        />
+        <meshStandardMaterial color="#777f7d" roughness={0.92} metalness={0.04} />
       </mesh>
 
       <RoundedBox args={[17, 0.8, 5.5]} radius={0.32} smoothness={6} position={[-10, -2.65, -15]} rotation={[0, -0.16, 0]}>
@@ -348,6 +336,7 @@ function OpenSet({ compact }: { compact: boolean }) {
 }
 
 function DirectedSequence({ compact, reducedMotion }: { compact: boolean; reducedMotion: boolean }) {
+  const invalidate = useThree((state) => state.invalidate);
   const cameraLight = useRef<THREE.PointLight>(null);
   const desiredPosition = useRef(new THREE.Vector3(0, 0, 10));
   const desiredTarget = useRef(new THREE.Vector3(2, 0, 0));
@@ -357,9 +346,19 @@ function DirectedSequence({ compact, reducedMotion }: { compact: boolean; reduce
 
   useEffect(() => {
     reelElement.current = document.querySelector<HTMLElement>(".immersive-reel");
-  }, []);
 
-  useFrame(({ camera, pointer }, delta) => {
+    const requestFrame = () => invalidate();
+    window.addEventListener("scroll", requestFrame, { passive: true });
+    window.addEventListener("resize", requestFrame);
+    requestFrame();
+
+    return () => {
+      window.removeEventListener("scroll", requestFrame);
+      window.removeEventListener("resize", requestFrame);
+    };
+  }, [invalidate]);
+
+  useFrame(({ camera }, delta) => {
     const reel = reelElement.current;
     const scrollY = window.scrollY;
     const documentTravel = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
@@ -389,12 +388,10 @@ function DirectedSequence({ compact, reducedMotion }: { compact: boolean; reduce
     cameraCurve.getPointAt(easedProgress, desiredPosition.current);
     targetCurve.getPointAt(easedProgress, desiredTarget.current);
 
-    const pointerX = compact ? 0 : pointer.x * 0.12;
-    const pointerY = compact ? 0 : pointer.y * 0.045;
     const damping = reducedMotion ? 28 : 3.2;
 
-    camera.position.x = THREE.MathUtils.damp(camera.position.x, desiredPosition.current.x + pointerX, damping, delta);
-    camera.position.y = THREE.MathUtils.damp(camera.position.y, desiredPosition.current.y + pointerY, damping, delta);
+    camera.position.x = THREE.MathUtils.damp(camera.position.x, desiredPosition.current.x, damping, delta);
+    camera.position.y = THREE.MathUtils.damp(camera.position.y, desiredPosition.current.y, damping, delta);
     camera.position.z = THREE.MathUtils.damp(camera.position.z, desiredPosition.current.z, damping, delta);
     smoothedTarget.current.x = THREE.MathUtils.damp(smoothedTarget.current.x, desiredTarget.current.x, reducedMotion ? 30 : 3.4, delta);
     smoothedTarget.current.y = THREE.MathUtils.damp(smoothedTarget.current.y, desiredTarget.current.y, reducedMotion ? 30 : 3.4, delta);
@@ -410,6 +407,12 @@ function DirectedSequence({ compact, reducedMotion }: { compact: boolean; reduce
     if (cameraLight.current) {
       cameraLight.current.position.set(camera.position.x - 1.2, camera.position.y + 1.7, camera.position.z + 1.8);
     }
+
+    const cameraIsSettling = camera.position.distanceToSquared(desiredPosition.current) > 0.000004;
+    const targetIsSettling = smoothedTarget.current.distanceToSquared(desiredTarget.current) > 0.000004;
+    const progressIsSettling = Math.abs(smoothedProgress.current - rawProgress) > 0.00002;
+
+    if (!reducedMotion && (cameraIsSettling || targetIsSettling || progressIsSettling)) invalidate();
   });
 
   return (
@@ -467,15 +470,7 @@ function CinematicWorld() {
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
 
   return (
-    <>
-      <DirectedSequence compact={compact} reducedMotion={reducedMotion} />
-      {!compact && !reducedMotion ? (
-        <EffectComposer multisampling={4} enableNormalPass={false}>
-          <Bloom intensity={0.18} luminanceThreshold={0.78} luminanceSmoothing={0.8} mipmapBlur />
-          <Vignette eskil={false} offset={0.18} darkness={0.28} />
-        </EffectComposer>
-      ) : null}
-    </>
+    <DirectedSequence compact={compact} reducedMotion={reducedMotion} />
   );
 }
 
@@ -571,6 +566,7 @@ export function CinematicScene() {
       <div className="cinematic-fallback" aria-hidden="true" />
       <div className="cinematic-canvas" aria-hidden="true">
         <Canvas
+          frameloop="demand"
           camera={{ fov: 43, near: 0.1, far: 80, position: [0, 0, 8] }}
           dpr={[1, 1.65]}
           gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}

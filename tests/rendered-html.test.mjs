@@ -82,7 +82,9 @@ test("keeps the experiment responsive, accessible, and self-contained", async ()
   assert.match(scene, /\/marissa-portrait\.png/);
   assert.match(scene, /createFeatherTexture/);
   assert.match(scene, /alphaMap=\{featherTexture\}/);
-  assert.match(scene, /MeshReflectorMaterial/);
+  assert.doesNotMatch(scene, /MeshReflectorMaterial|EffectComposer|<Bloom/);
+  assert.match(scene, /frameloop="demand"/);
+  assert.match(scene, /useThree/);
   assert.match(scene, /CatmullRomCurve3/);
   assert.match(scene, /function mapReelProgress/);
   assert.match(scene, /function getActiveReelFrame/);
@@ -93,8 +95,6 @@ test("keeps the experiment responsive, accessible, and self-contained", async ()
   assert.match(scene, /sphereGeometry/);
   assert.doesNotMatch(scene, /<Noise|<Sky|function Dust/);
   assert.match(scene, /function CinematicHud/);
-  assert.match(scene, /EffectComposer/);
-  assert.match(scene, /<Bloom/);
   assert.match(scene, /toneMappingExposure = 1\.12/);
   assert.doesNotMatch(`${page}${booking}${header}${layout}`, /\u2014|&mdash;/i);
   assert.match(layout, /generateMetadata/);
